@@ -246,13 +246,12 @@ export default function App() {
         <div className="container">
           <div className="uc-header-top">
             <a href="#" className="uc-brand-logo">
-              <span>Cleaning Hero</span>
-              <span className="uc-brand-badge">Pro</span>
+              <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="uc-logo-img" alt="Cleaning Hero Official Logo" />
             </a>
             
             <div className="uc-location-container">
               <div className="uc-location-selector">
-                <MapPin size={18} color="#3262ec" />
+                <MapPin size={18} color="#0284c7" />
                 <span>Mirzapur, LNMU Campus</span>
               </div>
               <div className="uc-location-sub">Darbhanga, Bihar 846004</div>
@@ -391,7 +390,7 @@ export default function App() {
                 </div>
               </div>
               <div className="uc-slider-info">
-                <h4 className="uc-slider-title">Expert Stain & Dust Extraction</h4>
+                <h4 className="uc-slider-title">Expert Sofa Stain & Dust Extraction</h4>
                 <p className="uc-slider-desc">Drag the separator bar to see our sofa cleaning difference.</p>
               </div>
             </div>
@@ -509,7 +508,7 @@ export default function App() {
           <div className="uc-drawer-content" onClick={e => e.stopPropagation()}>
             <div className="uc-drawer-header">
               <h3 className="uc-drawer-title">{selectedService.name}</h3>
-              <button onClick={() => setSelectedService(null)}>
+              <button className="uc-drawer-close" onClick={() => setSelectedService(null)}>
                 <X size={20} />
               </button>
             </div>
@@ -583,7 +582,7 @@ export default function App() {
           <div className="uc-drawer-content" onClick={e => e.stopPropagation()}>
             <div className="uc-drawer-header">
               <h3 className="uc-drawer-title">Booking Checkout</h3>
-              <button onClick={() => setIsDrawerOpen(false)}>
+              <button className="uc-drawer-close" onClick={() => setIsDrawerOpen(false)}>
                 <X size={20} />
               </button>
             </div>
