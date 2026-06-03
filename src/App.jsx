@@ -21,9 +21,9 @@ const CATEGORIES = [
   { id: "tank", label: "Tank Clean", icon: "🛢️" },
   { id: "ac", label: "AC Repair", icon: "❄️" },
   { id: "sofa", label: "Sofa Wash", icon: "🛋️" },
+  { id: "ro", label: "RO Purifier", icon: "💧" },
   { id: "home", label: "Deep Clean", icon: "🏠" },
   { id: "electric", label: "Electrician", icon: "⚡" },
-  { id: "ro", label: "RO Purifier", icon: "💧" },
   { id: "septic", label: "Septic Tank", icon: "🚛" },
   { id: "solar", label: "Solar Panel", icon: "☀️" },
 ];
@@ -184,6 +184,30 @@ export default function App() {
     return cart[key]?.qty || 0;
   };
 
+  // Add default variant to cart on click
+  const handleServiceAdd = (service) => {
+    if (service.variants && service.variants.length > 0) {
+      const firstVariant = service.variants[0];
+      const key = `${service.id}_v_${firstVariant.id}`;
+      // Add if not already selected
+      if (!cart[key]) {
+        updateCartQty(service.id, firstVariant.id, 1);
+      }
+    }
+    setIsWizardOpen(true);
+    setWizardStep(1);
+  };
+
+  const handleCategoryClick = (categoryId) => {
+    const service = SERVICES_DATABASE.find(s => s.id === categoryId);
+    if (service) {
+      handleServiceAdd(service);
+    } else {
+      setIsWizardOpen(true);
+      setWizardStep(1);
+    }
+  };
+
   // Slider actions
   const handleSliderMove = (clientX) => {
     if (!sliderContainerRef.current) return;
@@ -215,9 +239,10 @@ export default function App() {
   }, [dragging]);
 
   const submitBooking = (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
+
     if (!name || !phone || !address || !date || !timeSlot) {
-      alert("Please fill out all slot date, time, and contact info fields.");
+      alert("Please complete the slot selection and customer information details first.");
       return;
     }
 
@@ -239,18 +264,27 @@ export default function App() {
       `Kindly confirm this booking reservation request.`;
 
     window.open(`https://wa.me/919031116900?text=${encodeURIComponent(messageText)}`, '_blank');
+    
+    // Clear state
+    setCart({});
+    setName("");
+    setPhone("");
+    setAddress("");
+    setDate("");
+    setTimeSlot("");
+    setIsWizardOpen(false);
   };
 
   return (
     <div className="app-layout">
-      {/* Refactored Header */}
+      {/* Header */}
       <header className="uc-header">
         <div className="container">
           <a href="#" className="uc-brand-logo">
             <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="uc-logo-img" alt="Cleaning Hero Logo" />
           </a>
 
-          {/* Compact search bar placed in the center of header */}
+          {/* Compact search bar */}
           <div className="uc-search-container">
             <Search size={16} className="uc-search-icon" />
             <input 
@@ -304,10 +338,7 @@ export default function App() {
               <button 
                 key={cat.id} 
                 className="uc-category-btn"
-                onClick={() => {
-                  setIsWizardOpen(true);
-                  setWizardStep(1);
-                }}
+                onClick={() => handleCategoryClick(cat.id)}
               >
                 <div className="uc-category-icon-box">{cat.icon}</div>
                 <span className="uc-category-label">{cat.label}</span>
@@ -326,7 +357,7 @@ export default function App() {
 
           <div className="uc-services-grid">
             {displayedServices.map(service => (
-              <div key={service.id} className="uc-scroller-card" onClick={() => { setIsWizardOpen(true); setWizardStep(1); }}>
+              <div key={service.id} className="uc-scroller-card" onClick={() => handleServiceAdd(service)}>
                 <div className="uc-scroller-img" style={{ backgroundImage: `url(${service.image})` }}></div>
                 <div className="uc-scroller-info">
                   <h3 className="uc-scroller-name">{service.name}</h3>
@@ -338,8 +369,7 @@ export default function App() {
                     <span className="uc-scroller-price">{service.priceText}</span>
                     <button className="uc-add-btn-small" onClick={(e) => {
                       e.stopPropagation();
-                      setIsWizardOpen(true);
-                      setWizardStep(1);
+                      handleServiceAdd(service);
                     }}>ADD</button>
                   </div>
                 </div>
@@ -440,7 +470,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Footer (Refactored to include call phone number) */}
+      {/* Footer */}
       <footer className="uc-footer">
         <div className="container">
           <div className="uc-footer-grid">
@@ -663,11 +693,11 @@ export default function App() {
                       style={{ marginLeft: wizardStep === 1 ? 'auto' : '0' }}
                       onClick={() => {
                         if (wizardStep === 1 && totalQty === 0) {
-                          alert("Please add at least one service/option to proceed!");
+                          alert("Please add at least one service variant to continue!");
                           return;
                         }
                         if (wizardStep === 2 && (!date || !timeSlot)) {
-                          alert("Please select a date and preferred time slot!");
+                          alert("Please select date and preferred time slot!");
                           return;
                         }
                         if (wizardStep === 3 && (!name || !phone || !address)) {
