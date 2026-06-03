@@ -241,170 +241,254 @@ export default function App() {
 
   return (
     <div className="app-layout">
-      {/* Mobile Sticky Header */}
+      {/* Sticky Header */}
       <header className="uc-header">
-        <div className="uc-header-top">
-          <div className="uc-location-container">
-            <div className="uc-location-selector">
-              <MapPin size={18} color="#3262ec" />
-              <span>Mirzapur, LNMU Campus</span>
+        <div className="container">
+          <div className="uc-header-top">
+            <a href="#" className="uc-brand-logo">
+              <span>Cleaning Hero</span>
+              <span className="uc-brand-badge">Pro</span>
+            </a>
+            
+            <div className="uc-location-container">
+              <div className="uc-location-selector">
+                <MapPin size={18} color="#3262ec" />
+                <span>Mirzapur, LNMU Campus</span>
+              </div>
+              <div className="uc-location-sub">Darbhanga, Bihar 846004</div>
             </div>
-            <div className="uc-location-sub">Darbhanga, Bihar 846004</div>
+            
+            <div className="uc-actions-group">
+              <a href="tel:+919031116900" className="uc-contact-btn">
+                <Phone size={15} />
+                <span>Call +91 90311 16900</span>
+              </a>
+            </div>
           </div>
-          <a href="tel:+919031116900" className="uc-contact-icon">
-            <Phone size={18} />
-          </a>
-        </div>
 
-        <div className="uc-search-container">
-          <Search size={18} className="uc-search-icon" />
-          <input 
-            type="text" 
-            placeholder="Search for Water Tank, AC, Sofa Cleaning..." 
-            className="uc-search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <div className="uc-search-container">
+            <Search size={18} className="uc-search-icon" />
+            <input 
+              type="text" 
+              placeholder="Search for Water Tank, AC service, Sofa dry cleaning..." 
+              className="uc-search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
       </header>
 
-      {/* Main Promo Banners */}
-      <div className="uc-promo-section">
-        <div 
-          className="uc-promo-banner" 
-          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80&w=400')` }}
-        >
-          <div className="uc-promo-content">
-            <div className="uc-promo-title">Up to 25% Off AC Service</div>
-            <div className="uc-promo-subtitle">Clean filters and boost high cooling output instantly.</div>
-          </div>
-        </div>
-
-        <div 
-          className="uc-promo-banner" 
-          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=400')` }}
-        >
-          <div className="uc-promo-content">
-            <div className="uc-promo-title">Pure Tank Guarantee</div>
-            <div className="uc-promo-subtitle">Full machine-based vacuum cleaning from ₹499.</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Circular Grid Services */}
-      <section className="uc-categories-container">
-        <div className="uc-categories-grid">
-          {CATEGORIES.map(cat => (
-            <button 
-              key={cat.id} 
-              className="uc-category-btn"
-              onClick={() => {
-                const item = SERVICES_DATABASE.find(s => s.id === cat.id);
-                if (item) setSelectedService(item);
-              }}
+      {/* Promo Banners Grid */}
+      <section className="uc-promo-section">
+        <div className="container">
+          <div className="uc-promo-grid">
+            <div 
+              className="uc-promo-banner" 
+              style={{ backgroundImage: `url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80&w=600')` }}
             >
-              <div className="uc-category-icon-box">{cat.icon}</div>
-              <span className="uc-category-label">{cat.label}</span>
-            </button>
-          ))}
+              <div className="uc-promo-content">
+                <div className="uc-promo-title">Up to 25% Off AC Service</div>
+                <div className="uc-promo-subtitle">Clean filters and boost high cooling output instantly.</div>
+              </div>
+            </div>
+
+            <div 
+              className="uc-promo-banner" 
+              style={{ backgroundImage: `url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600')` }}
+            >
+              <div className="uc-promo-content">
+                <div className="uc-promo-title">Pure Tank Guarantee</div>
+                <div className="uc-promo-subtitle">Full machine-based vacuum cleaning from ₹499.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Best Selling horizontal scroll section */}
-      <section className="uc-section">
-        <div className="uc-section-header">
-          <h2 className="uc-section-title">Trending Home Services</h2>
-          <span className="uc-section-more">See All</span>
+      {/* Grid Services Categories */}
+      <section className="uc-categories-container">
+        <div className="container">
+          <div className="uc-categories-grid">
+            {CATEGORIES.map(cat => (
+              <button 
+                key={cat.id} 
+                className="uc-category-btn"
+                onClick={() => {
+                  const item = SERVICES_DATABASE.find(s => s.id === cat.id);
+                  if (item) setSelectedService(item);
+                }}
+              >
+                <div className="uc-category-icon-box">{cat.icon}</div>
+                <span className="uc-category-label">{cat.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
+      </section>
 
-        <div className="uc-services-scroller">
-          {displayedServices.map(service => (
-            <div key={service.id} className="uc-scroller-card" onClick={() => setSelectedService(service)}>
-              <div className="uc-scroller-img" style={{ backgroundImage: `url(${service.image})` }}></div>
-              <div className="uc-scroller-info">
-                <h3 className="uc-scroller-name">{service.name}</h3>
-                <div className="uc-scroller-rating">
-                  <Star size={10} fill="currentColor" />
-                  <span>{service.rating} ({service.reviews})</span>
-                </div>
-                <div className="uc-scroller-footer">
-                  <span className="uc-scroller-price">{service.priceText}</span>
-                  <button className="uc-add-btn-small" onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedService(service);
-                  }}>ADD</button>
+      {/* Trending Services Grid */}
+      <section className="uc-section">
+        <div className="container">
+          <div className="uc-section-header">
+            <h2 className="uc-section-title">Trending Home Services</h2>
+            <span className="uc-section-more">See All</span>
+          </div>
+
+          <div className="uc-services-grid">
+            {displayedServices.map(service => (
+              <div key={service.id} className="uc-scroller-card" onClick={() => setSelectedService(service)}>
+                <div className="uc-scroller-img" style={{ backgroundImage: `url(${service.image})` }}></div>
+                <div className="uc-scroller-info">
+                  <h3 className="uc-scroller-name">{service.name}</h3>
+                  <div className="uc-scroller-rating">
+                    <Star size={12} fill="currentColor" />
+                    <span>{service.rating} ({service.reviews} reviews)</span>
+                  </div>
+                  <div className="uc-scroller-footer">
+                    <span className="uc-scroller-price">{service.priceText}</span>
+                    <button className="uc-add-btn-small" onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedService(service);
+                    }}>ADD</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Before / After Drag Slider widget */}
       <section className="uc-section">
-        <div className="uc-section-header">
-          <h2 className="uc-section-title">Our Magic Cleaning Results</h2>
-        </div>
+        <div className="container">
+          <div className="uc-slider-layout">
+            <div className="uc-slider-card">
+              <div 
+                className="uc-slider-container"
+                ref={sliderContainerRef}
+                onTouchMove={handleTouch}
+              >
+                <div 
+                  className="uc-slider-img"
+                  style={{ backgroundImage: `url('https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&q=80&w=600')` }}
+                ></div>
+                
+                <div 
+                  className="uc-slider-img"
+                  style={{ 
+                    backgroundImage: `url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80&w=600')`,
+                    width: `${sliderPos}%`
+                  }}
+                ></div>
 
-        <div className="uc-slider-card">
-          <div 
-            className="uc-slider-container"
-            ref={sliderContainerRef}
-            onTouchMove={handleTouch}
-          >
-            {/* After cleaned image */}
-            <div 
-              className="uc-slider-img"
-              style={{ backgroundImage: `url('https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&q=80&w=500')` }}
-            ></div>
-            
-            {/* Before dirty image clipped */}
-            <div 
-              className="uc-slider-img"
-              style={{ 
-                backgroundImage: `url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80&w=500')`,
-                width: `${sliderPos}%`
-              }}
-            ></div>
-
-            {/* Slider bar overlay */}
-            <div 
-              className="uc-slider-bar"
-              style={{ left: `${sliderPos}%` }}
-              onMouseDown={() => setDragging(true)}
-            >
-              <div className="uc-slider-handle">↔</div>
+                <div 
+                  className="uc-slider-bar"
+                  style={{ left: `${sliderPos}%` }}
+                  onMouseDown={() => setDragging(true)}
+                >
+                  <div className="uc-slider-handle">↔</div>
+                </div>
+              </div>
+              <div className="uc-slider-info">
+                <h4 className="uc-slider-title">Expert Stain & Dust Extraction</h4>
+                <p className="uc-slider-desc">Drag the separator bar to see our sofa cleaning difference.</p>
+              </div>
             </div>
-          </div>
-          <div className="uc-slider-info">
-            <h4 className="uc-slider-title">Expert Stain & Dust Extraction</h4>
-            <p className="uc-slider-desc">Drag the white separator bar to see our sofa cleaning difference.</p>
+
+            <div>
+              <h2 className="uc-section-title" style={{ marginBottom: '1rem' }}>See the Cleaning Hero Magic</h2>
+              <p style={{ color: 'var(--uc-gray-medium)', lineHeight: '1.6', marginBottom: '1.5rem' }}>
+                Our technician experts are armed with commercial high-suction extractors, cleaning shampoo disinfectants, and high-pressure steam washers. We don't just clean, we restore the factory shine of your home items.
+              </p>
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <a href="tel:+919031116900" className="uc-btn-primary" style={{ textDecoration: 'none' }}>
+                  <Phone size={16} /> Book Free Inspection
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Trust & Safe badges */}
       <section className="uc-section">
-        <div className="uc-section-header">
-          <h2 className="uc-section-title">Why Cleaning Hero?</h2>
-        </div>
-        <div className="uc-trust-grid">
-          <div className="uc-trust-item">
-            <ShieldCheck size={20} className="uc-trust-icon" />
-            <div className="uc-trust-info">
-              <h5>100% Safe Work</h5>
-              <p>Certified skin-safe non toxic solutions.</p>
-            </div>
+        <div className="container">
+          <div className="uc-section-header">
+            <h2 className="uc-section-title">Safe and Certified Quality Assurances</h2>
           </div>
-          <div className="uc-trust-item">
-            <Sparkles size={20} className="uc-trust-icon" />
-            <div className="uc-trust-info">
-              <h5>Premium Tools</h5>
-              <p>High suction and jet power cleaners.</p>
+          <div className="uc-trust-grid">
+            <div className="uc-trust-item">
+              <ShieldCheck size={28} className="uc-trust-icon" />
+              <div className="uc-trust-info">
+                <h5>100% Safe Work</h5>
+                <p>Skin-safe non toxic solutions verified for babies and pets.</p>
+              </div>
+            </div>
+            <div className="uc-trust-item">
+              <Sparkles size={28} className="uc-trust-icon" />
+              <div className="uc-trust-info">
+                <h5>Premium Tools</h5>
+                <p>Equipped with vacuum pumps and jet systems.</p>
+              </div>
+            </div>
+            <div className="uc-trust-item">
+              <ShieldCheck size={28} className="uc-trust-icon" />
+              <div className="uc-trust-info">
+                <h5>Insured Clean</h5>
+                <p>Rest assured, all work is done under damage insurance protection.</p>
+              </div>
+            </div>
+            <div className="uc-trust-item">
+              <Sparkles size={28} className="uc-trust-icon" />
+              <div className="uc-trust-info">
+                <h5>Re-wash Guarantee</h5>
+                <p>If not 100% satisfied, we will re-wash for free.</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="uc-footer">
+        <div className="container">
+          <div className="uc-footer-grid">
+            <div className="uc-footer-brand">
+              <h4>Cleaning Hero</h4>
+              <p>Darbhanga's professional home services utility booking application. Serving Mirzapur, LNMU Campus, and surrounding Bihar neighborhoods with reliable work.</p>
+            </div>
+            <div className="uc-footer-col">
+              <h5>Services</h5>
+              <ul className="uc-footer-links">
+                <li><a href="#">Water Tank Cleaning</a></li>
+                <li><a href="#">AC Jet Servicing</a></li>
+                <li><a href="#">Sofa Dry Clean</a></li>
+              </ul>
+            </div>
+            <div className="uc-footer-col">
+              <h5>Repairs</h5>
+              <ul className="uc-footer-links">
+                <li><a href="#">RO Purifier Repair</a></li>
+                <li><a href="#">Electrician Fitting</a></li>
+                <li><a href="#">Septic Tank Suction</a></li>
+              </ul>
+            </div>
+            <div className="uc-footer-col">
+              <h5>Head Office</h5>
+              <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem' }}>
+                Cleaning Hero Office,<br />
+                Mirzapur Road (Near LNMU),<br />
+                Darbhanga, Bihar 846004
+              </p>
+            </div>
+          </div>
+          <div className="uc-footer-bottom">
+            <p>© 2026 Cleaning Hero. Designed to be premium and fully responsive.</p>
+            <p>Darbhanga, Bihar</p>
+          </div>
+        </div>
+      </footer>
 
       {/* Floating Bottom Cart Bar */}
       {totalQty > 0 && !isDrawerOpen && (
@@ -432,12 +516,12 @@ export default function App() {
 
             <div className="uc-drawer-meta">
               <div className="uc-meta-item">
-                <Clock size={14} className="uc-meta-icon" />
+                <Clock size={16} className="uc-meta-icon" />
                 <span>{selectedService.time}</span>
               </div>
               <div className="uc-meta-item">
-                <Star size={14} className="uc-meta-icon" style={{ color: '#fbbf24' }} />
-                <span>{selectedService.rating} Rating</span>
+                <Star size={16} className="uc-meta-icon" style={{ color: '#fbbf24' }} />
+                <span>{selectedService.rating} Rating ({selectedService.reviews} reviews)</span>
               </div>
             </div>
 
@@ -465,7 +549,7 @@ export default function App() {
               </ul>
             </div>
 
-            <div className="uc-inc-title" style={{ marginTop: '1rem' }}>Select Option</div>
+            <div className="uc-inc-title" style={{ marginTop: '1.5rem' }}>Select Option</div>
             {selectedService.variants.map(v => {
               const qty = getQty(selectedService.id, v.id);
               return (
@@ -510,7 +594,7 @@ export default function App() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {addedItems.map(item => (
                   <div key={item.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600 }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 700 }}>
                       {item.service.name} <span style={{ color: 'var(--uc-gray-medium)' }}>({item.variant.name})</span>
                     </div>
                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
@@ -519,14 +603,14 @@ export default function App() {
                         <span className="uc-qty-val">{item.qty}</span>
                         <button type="button" className="uc-qty-btn" onClick={() => updateCartQty(item.service.id, item.variant.id, 1)}>+</button>
                       </div>
-                      <span style={{ fontSize: '0.8rem', fontWeight: 800 }}>₹{item.price * item.qty}</span>
+                      <span style={{ fontSize: '0.85rem', fontWeight: 800 }}>₹{item.price * item.qty}</span>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Form entries */}
-              <div className="uc-inc-title" style={{ marginTop: '1rem' }}>Delivery Slot & Address</div>
+              <div className="uc-inc-title" style={{ marginTop: '1.5rem' }}>Delivery Slot & Address</div>
               
               <div className="uc-input-group">
                 <label className="uc-input-label">Date</label>
