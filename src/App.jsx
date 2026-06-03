@@ -10,6 +10,7 @@ import {
   Phone, 
   ShieldCheck, 
   ChevronRight, 
+  ChevronLeft,
   Info, 
   Sparkles,
   MessageSquare,
@@ -123,9 +124,10 @@ const SERVICES_DATABASE = [
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedService, setSelectedService] = useState(null);
   const [cart, setCart] = useState({});
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [wizardStep, setWizardStep] = useState(1); // Steps: 1 (Services), 2 (Schedule), 3 (Info), 4 (Summary)
+  
   const [sliderPos, setSliderPos] = useState(50);
   const [dragging, setDragging] = useState(false);
 
@@ -143,7 +145,7 @@ export default function App() {
     s.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Cart logic parsing
+  // Cart parsing logic
   const addedItems = Object.entries(cart).map(([key, item]) => {
     const [serviceId, variantId] = key.split('_v_');
     const service = SERVICES_DATABASE.find(s => s.id === serviceId);
@@ -182,7 +184,7 @@ export default function App() {
     return cart[key]?.qty || 0;
   };
 
-  // Slider controls
+  // Slider actions
   const handleSliderMove = (clientX) => {
     if (!sliderContainerRef.current) return;
     const rect = sliderContainerRef.current.getBoundingClientRect();
@@ -215,7 +217,7 @@ export default function App() {
   const submitBooking = (e) => {
     e.preventDefault();
     if (!name || !phone || !address || !date || !timeSlot) {
-      alert("Please fill out all location & contact fields.");
+      alert("Please fill out all slot date, time, and contact info fields.");
       return;
     }
 
@@ -241,40 +243,29 @@ export default function App() {
 
   return (
     <div className="app-layout">
-      {/* Sticky Header */}
+      {/* Refactored Header */}
       <header className="uc-header">
         <div className="container">
-          <div className="uc-header-top">
-            <a href="#" className="uc-brand-logo">
-              <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="uc-logo-img" alt="Cleaning Hero Official Logo" />
-            </a>
-            
-            <div className="uc-location-container">
-              <div className="uc-location-selector">
-                <MapPin size={18} color="#0284c7" />
-                <span>Mirzapur, LNMU Campus</span>
-              </div>
-              <div className="uc-location-sub">Darbhanga, Bihar 846004</div>
-            </div>
-            
-            <div className="uc-actions-group">
-              <a href="tel:+919031116900" className="uc-contact-btn">
-                <Phone size={15} />
-                <span>Call +91 90311 16900</span>
-              </a>
-            </div>
-          </div>
+          <a href="#" className="uc-brand-logo">
+            <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="uc-logo-img" alt="Cleaning Hero Logo" />
+          </a>
 
+          {/* Compact search bar placed in the center of header */}
           <div className="uc-search-container">
-            <Search size={18} className="uc-search-icon" />
+            <Search size={16} className="uc-search-icon" />
             <input 
               type="text" 
-              placeholder="Search for Water Tank, AC service, Sofa dry cleaning..." 
+              placeholder="Search services..." 
               className="uc-search-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+
+          {/* Top Right Book Now Button */}
+          <button className="uc-book-now-btn" onClick={() => { setIsWizardOpen(true); setWizardStep(1); }}>
+            Book Now
+          </button>
         </div>
       </header>
 
@@ -288,7 +279,7 @@ export default function App() {
             >
               <div className="uc-promo-content">
                 <div className="uc-promo-title">Up to 25% Off AC Service</div>
-                <div className="uc-promo-subtitle">Clean filters and boost high cooling output instantly.</div>
+                <div className="uc-promo-subtitle">Clean filters and boost cooling output instantly.</div>
               </div>
             </div>
 
@@ -314,8 +305,8 @@ export default function App() {
                 key={cat.id} 
                 className="uc-category-btn"
                 onClick={() => {
-                  const item = SERVICES_DATABASE.find(s => s.id === cat.id);
-                  if (item) setSelectedService(item);
+                  setIsWizardOpen(true);
+                  setWizardStep(1);
                 }}
               >
                 <div className="uc-category-icon-box">{cat.icon}</div>
@@ -331,12 +322,11 @@ export default function App() {
         <div className="container">
           <div className="uc-section-header">
             <h2 className="uc-section-title">Trending Home Services</h2>
-            <span className="uc-section-more">See All</span>
           </div>
 
           <div className="uc-services-grid">
             {displayedServices.map(service => (
-              <div key={service.id} className="uc-scroller-card" onClick={() => setSelectedService(service)}>
+              <div key={service.id} className="uc-scroller-card" onClick={() => { setIsWizardOpen(true); setWizardStep(1); }}>
                 <div className="uc-scroller-img" style={{ backgroundImage: `url(${service.image})` }}></div>
                 <div className="uc-scroller-info">
                   <h3 className="uc-scroller-name">{service.name}</h3>
@@ -348,7 +338,8 @@ export default function App() {
                     <span className="uc-scroller-price">{service.priceText}</span>
                     <button className="uc-add-btn-small" onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedService(service);
+                      setIsWizardOpen(true);
+                      setWizardStep(1);
                     }}>ADD</button>
                   </div>
                 </div>
@@ -397,13 +388,13 @@ export default function App() {
 
             <div>
               <h2 className="uc-section-title" style={{ marginBottom: '1rem' }}>See the Cleaning Hero Magic</h2>
-              <p style={{ color: 'var(--uc-gray-medium)', lineHeight: '1.6', marginBottom: '1.5rem' }}>
+              <p style={{ color: 'var(--brand-gray-medium)', lineHeight: '1.6', marginBottom: '1.5rem' }}>
                 Our technician experts are armed with commercial high-suction extractors, cleaning shampoo disinfectants, and high-pressure steam washers. We don't just clean, we restore the factory shine of your home items.
               </p>
               <div style={{ display: 'flex', gap: '1rem' }}>
-                <a href="tel:+919031116900" className="uc-btn-primary" style={{ textDecoration: 'none' }}>
-                  <Phone size={16} /> Book Free Inspection
-                </a>
+                <button className="uc-btn-primary" onClick={() => { setIsWizardOpen(true); setWizardStep(1); }}>
+                  <Sparkles size={16} /> Book Inspection
+                </button>
               </div>
             </div>
           </div>
@@ -449,13 +440,18 @@ export default function App() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer (Refactored to include call phone number) */}
       <footer className="uc-footer">
         <div className="container">
           <div className="uc-footer-grid">
             <div className="uc-footer-brand">
               <h4>Cleaning Hero</h4>
               <p>Darbhanga's professional home services utility booking application. Serving Mirzapur, LNMU Campus, and surrounding Bihar neighborhoods with reliable work.</p>
+              <div style={{ marginTop: '1.25rem' }}>
+                <a href="tel:+919031116900" style={{ color: 'var(--brand-blue)', fontWeight: 800, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Phone size={16} /> <span>Customer Care Support: +91 90311 16900</span>
+                </a>
+              </div>
             </div>
             <div className="uc-footer-col">
               <h5>Services</h5>
@@ -484,216 +480,271 @@ export default function App() {
           </div>
           <div className="uc-footer-bottom">
             <p>© 2026 Cleaning Hero. Designed to be premium and fully responsive.</p>
-            <p>Darbhanga, Bihar</p>
+            <p>Support: +91 90311 16900</p>
           </div>
         </div>
       </footer>
 
-      {/* Floating Bottom Cart Bar */}
-      {totalQty > 0 && !isDrawerOpen && (
-        <div className="uc-action-bar">
-          <div className="uc-action-details">
-            <span className="uc-action-qty">{totalQty} service selected</span>
-            <span className="uc-action-price">₹{grandTotal}</span>
-          </div>
-          <button className="uc-action-btn" onClick={() => setIsDrawerOpen(true)}>
-            View Booking details
-          </button>
-        </div>
-      )}
-
-      {/* Details drawer overlay */}
-      {selectedService && (
-        <div className="uc-drawer-overlay" onClick={() => setSelectedService(null)}>
-          <div className="uc-drawer-content" onClick={e => e.stopPropagation()}>
-            <div className="uc-drawer-header">
-              <h3 className="uc-drawer-title">{selectedService.name}</h3>
-              <button className="uc-drawer-close" onClick={() => setSelectedService(null)}>
-                <X size={20} />
+      {/* Shopify-Style Multistep Checkout Modal Overlay */}
+      {isWizardOpen && (
+        <div className="shopify-modal-overlay">
+          <div className="shopify-modal-container">
+            <div className="shopify-modal-header">
+              <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="shopify-modal-logo" alt="Logo" />
+              <button className="shopify-modal-close" onClick={() => setIsWizardOpen(false)}>
+                <X size={18} />
               </button>
             </div>
 
-            <div className="uc-drawer-meta">
-              <div className="uc-meta-item">
-                <Clock size={16} className="uc-meta-icon" />
-                <span>{selectedService.time}</span>
-              </div>
-              <div className="uc-meta-item">
-                <Star size={16} className="uc-meta-icon" style={{ color: '#fbbf24' }} />
-                <span>{selectedService.rating} Rating ({selectedService.reviews} reviews)</span>
-              </div>
-            </div>
-
-            <div className="uc-inc-section">
-              <div className="uc-inc-title">What's Included</div>
-              <ul className="uc-inc-list">
-                {selectedService.whatsIncluded.map((inc, i) => (
-                  <li key={i}>
-                    <Check size={14} className="uc-inc-check" />
-                    <span>{inc}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="uc-inc-section">
-              <div className="uc-inc-title">Whats Excluded</div>
-              <ul className="uc-inc-list">
-                {selectedService.whatsExcluded.map((exc, i) => (
-                  <li key={i}>
-                    <X size={14} className="uc-inc-cross" />
-                    <span>{exc}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="uc-inc-title" style={{ marginTop: '1.5rem' }}>Select Option</div>
-            {selectedService.variants.map(v => {
-              const qty = getQty(selectedService.id, v.id);
-              return (
-                <div key={v.id} className="uc-variant-row">
-                  <div>
-                    <div className="uc-variant-name">{v.name}</div>
-                    <div className="uc-variant-price">₹{v.price}</div>
+            <div className="shopify-wizard-layout">
+              {/* Left Column: Multistep configuration form content */}
+              <div className="shopify-wizard-left">
+                {/* Step indicators */}
+                <div className="shopify-steps-indicator">
+                  <div className={`shopify-step-node ${wizardStep === 1 ? 'active' : ''} ${wizardStep > 1 ? 'completed' : ''}`}>
+                    <div className="shopify-step-circle">1</div>
+                    <span className="shopify-step-label">Services</span>
                   </div>
-
-                  <div>
-                    {qty > 0 ? (
-                      <div className="uc-qty-selector">
-                        <button className="uc-qty-btn" onClick={() => updateCartQty(selectedService.id, v.id, -1)}>-</button>
-                        <span className="uc-qty-val">{qty}</span>
-                        <button className="uc-qty-btn" onClick={() => updateCartQty(selectedService.id, v.id, 1)}>+</button>
-                      </div>
-                    ) : (
-                      <button className="uc-add-btn-small" onClick={() => updateCartQty(selectedService.id, v.id, 1)}>ADD</button>
-                    )}
+                  <div className={`shopify-step-node ${wizardStep === 2 ? 'active' : ''} ${wizardStep > 2 ? 'completed' : ''}`}>
+                    <div className="shopify-step-circle">2</div>
+                    <span className="shopify-step-label">Schedule</span>
+                  </div>
+                  <div className={`shopify-step-node ${wizardStep === 3 ? 'active' : ''} ${wizardStep > 3 ? 'completed' : ''}`}>
+                    <div className="shopify-step-circle">3</div>
+                    <span className="shopify-step-label">Info</span>
+                  </div>
+                  <div className={`shopify-step-node ${wizardStep === 4 ? 'active' : ''}`}>
+                    <div className="shopify-step-circle">4</div>
+                    <span className="shopify-step-label">Confirm</span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
-      {/* Cart Checkout Bottom Drawer */}
-      {isDrawerOpen && (
-        <div className="uc-drawer-overlay" onClick={() => setIsDrawerOpen(false)}>
-          <div className="uc-drawer-content" onClick={e => e.stopPropagation()}>
-            <div className="uc-drawer-header">
-              <h3 className="uc-drawer-title">Booking Checkout</h3>
-              <button className="uc-drawer-close" onClick={() => setIsDrawerOpen(false)}>
-                <X size={20} />
-              </button>
-            </div>
+                {/* Form Step Content */}
+                {wizardStep === 1 && (
+                  <div>
+                    <h3 className="shopify-form-title">Select Cleaning Services</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                      {SERVICES_DATABASE.map(service => (
+                        <div key={service.id} className="shopify-service-row" style={{ display: 'block' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div className="shopify-service-details">
+                              <h4>{service.name}</h4>
+                              <p>{service.description}</p>
+                            </div>
+                            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--brand-blue)' }}>
+                              {service.priceText}
+                            </span>
+                          </div>
 
-            <form onSubmit={submitBooking} className="uc-checkout-form">
-              {/* Added items review */}
-              <div className="uc-inc-title">Selected Items</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {addedItems.map(item => (
-                  <div key={item.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ fontSize: '0.85rem', fontWeight: 700 }}>
-                      {item.service.name} <span style={{ color: 'var(--uc-gray-medium)' }}>({item.variant.name})</span>
-                    </div>
-                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                      <div className="uc-qty-selector">
-                        <button type="button" className="uc-qty-btn" onClick={() => updateCartQty(item.service.id, item.variant.id, -1)}>-</button>
-                        <span className="uc-qty-val">{item.qty}</span>
-                        <button type="button" className="uc-qty-btn" onClick={() => updateCartQty(item.service.id, item.variant.id, 1)}>+</button>
-                      </div>
-                      <span style={{ fontSize: '0.85rem', fontWeight: 800 }}>₹{item.price * item.qty}</span>
+                          <div className="shopify-variants-box">
+                            {service.variants.map(v => {
+                              const qty = getQty(service.id, v.id);
+                              return (
+                                <div key={v.id} className="shopify-variant-line">
+                                  <span>{v.name} (₹{v.price})</span>
+                                  <div className="uc-qty-selector">
+                                    <button type="button" className="uc-qty-btn" onClick={() => updateCartQty(service.id, v.id, -1)}>-</button>
+                                    <span className="uc-qty-val">{qty}</span>
+                                    <button type="button" className="uc-qty-btn" onClick={() => updateCartQty(service.id, v.id, 1)}>+</button>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                ))}
-              </div>
+                )}
 
-              {/* Form entries */}
-              <div className="uc-inc-title" style={{ marginTop: '1.5rem' }}>Delivery Slot & Address</div>
-              
-              <div className="uc-input-group">
-                <label className="uc-input-label">Date</label>
-                <input 
-                  type="date" 
-                  required
-                  className="uc-input"
-                  value={date}
-                  onChange={e => setDate(e.target.value)}
-                />
-              </div>
+                {wizardStep === 2 && (
+                  <div>
+                    <h3 className="shopify-form-title">Select Appointment Schedule</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                      <div className="uc-input-group">
+                        <label className="uc-input-label">Date</label>
+                        <input 
+                          type="date" 
+                          required
+                          className="uc-input"
+                          value={date}
+                          onChange={e => setDate(e.target.value)}
+                        />
+                      </div>
 
-              <div className="uc-input-group">
-                <label className="uc-input-label">Preferred Time Slot</label>
-                <div className="uc-slots-grid">
-                  {["Morning (8AM-11AM)", "Afternoon (12PM-3PM)", "Evening (4PM-7PM)"].map(slot => (
-                    <div 
-                      key={slot}
-                      className={`uc-slot-btn ${timeSlot === slot ? 'active' : ''}`}
-                      onClick={() => setTimeSlot(slot)}
+                      <div className="uc-input-group">
+                        <label className="uc-input-label">Preferred Time Slot</label>
+                        <div className="uc-slots-grid">
+                          {["Morning (8AM-11AM)", "Afternoon (12PM-3PM)", "Evening (4PM-7PM)"].map(slot => (
+                            <div 
+                              key={slot}
+                              className={`uc-slot-btn ${timeSlot === slot ? 'active' : ''}`}
+                              onClick={() => setTimeSlot(slot)}
+                            >
+                              {slot.split(" ")[0]}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {wizardStep === 3 && (
+                  <div>
+                    <h3 className="shopify-form-title">Contact & Location Info</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                      <div className="uc-input-group">
+                        <label className="uc-input-label">Your Name</label>
+                        <input 
+                          type="text" 
+                          placeholder="e.g. Asif Raza" 
+                          required
+                          className="uc-input"
+                          value={name}
+                          onChange={e => setName(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="uc-input-group">
+                        <label className="uc-input-label">WhatsApp Mobile Number</label>
+                        <input 
+                          type="tel" 
+                          placeholder="e.g. 9031116900" 
+                          required
+                          className="uc-input"
+                          value={phone}
+                          onChange={e => setPhone(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="uc-input-group">
+                        <label className="uc-input-label">Full Address in Darbhanga</label>
+                        <textarea 
+                          rows={3}
+                          placeholder="Street, landmarks, house number..."
+                          required
+                          className="uc-input"
+                          value={address}
+                          onChange={e => setAddress(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {wizardStep === 4 && (
+                  <div>
+                    <h3 className="shopify-form-title">Review & Place Reservation</h3>
+                    <p style={{ color: 'var(--brand-gray-medium)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+                      Please review your booking details on the right summary panel. Click the confirmation button below to send your reservation request directly to our dispatch office via WhatsApp.
+                    </p>
+                    <div className="uc-trust-item" style={{ flexDirection: 'row', textAlign: 'left', gap: '1rem', padding: '1rem' }}>
+                      <ShieldCheck size={28} className="uc-trust-icon" />
+                      <div>
+                        <h5 style={{ fontSize: '0.9rem' }}>No Advance Payment Required</h5>
+                        <p style={{ fontSize: '0.75rem', marginTop: '0.15rem' }}>Payment is collected only after the service is fully completed at your doorstep.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Footer buttons actions inside wizard */}
+                <div className="shopify-wizard-footer">
+                  {wizardStep > 1 && (
+                    <button type="button" className="btn-wizard-back" onClick={() => setWizardStep(prev => prev - 1)}>
+                      Back
+                    </button>
+                  )}
+                  {wizardStep < 4 ? (
+                    <button 
+                      type="button" 
+                      className="btn-wizard-next" 
+                      style={{ marginLeft: wizardStep === 1 ? 'auto' : '0' }}
+                      onClick={() => {
+                        if (wizardStep === 1 && totalQty === 0) {
+                          alert("Please add at least one service/option to proceed!");
+                          return;
+                        }
+                        if (wizardStep === 2 && (!date || !timeSlot)) {
+                          alert("Please select a date and preferred time slot!");
+                          return;
+                        }
+                        if (wizardStep === 3 && (!name || !phone || !address)) {
+                          alert("Please fill out all address and contact details!");
+                          return;
+                        }
+                        setWizardStep(prev => prev + 1);
+                      }}
                     >
-                      {slot.split(" ")[0]}
+                      Continue
+                    </button>
+                  ) : (
+                    <button type="button" className="btn-wizard-next" onClick={submitBooking}>
+                      Place Booking Order
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Right Column: Dynamic Shopify Style Cart Summary panel */}
+              <div className="shopify-wizard-right">
+                <h3 className="shopify-checkout-summary-title">Order Summary</h3>
+                
+                {addedItems.length === 0 ? (
+                  <p style={{ color: 'var(--brand-gray-medium)', fontSize: '0.85rem' }}>No items selected yet.</p>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', flex: '1' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                      {addedItems.map(item => (
+                        <div key={item.key} className="shopify-summary-item">
+                          <div>
+                            <span className="shopify-summary-item-name">{item.service.name}</span>
+                            <div className="shopify-summary-item-desc">
+                              {item.variant.name} (x{item.qty})
+                            </div>
+                          </div>
+                          <span style={{ fontWeight: '800' }}>₹{item.price * item.qty}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
 
-              <div className="uc-input-group">
-                <label className="uc-input-label">Your Name</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. Asif Raza" 
-                  required
-                  className="uc-input"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                />
-              </div>
+                    {/* Schedule detail recap */}
+                    {(date || timeSlot) && (
+                      <div style={{ borderTop: '1px solid var(--brand-border)', paddingTop: '1rem', fontSize: '0.8rem' }}>
+                        <div style={{ fontWeight: 800, marginBottom: '0.25rem' }}>Schedule Slot</div>
+                        {date && <div>Date: {date}</div>}
+                        {timeSlot && <div>Time: {timeSlot}</div>}
+                      </div>
+                    )}
 
-              <div className="uc-input-group">
-                <label className="uc-input-label">WhatsApp Mobile Number</label>
-                <input 
-                  type="tel" 
-                  placeholder="e.g. 9031116900" 
-                  required
-                  className="uc-input"
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                />
-              </div>
+                    {/* Customer detail recap */}
+                    {name && (
+                      <div style={{ borderTop: '1px solid var(--brand-border)', paddingTop: '1rem', fontSize: '0.8rem' }}>
+                        <div style={{ fontWeight: 800, marginBottom: '0.25rem' }}>Ship To</div>
+                        <div>{name} ({phone})</div>
+                        <div style={{ wordBreak: 'break-all' }}>{address}</div>
+                      </div>
+                    )}
 
-              <div className="uc-input-group">
-                <label className="uc-input-label">Full Address in Darbhanga</label>
-                <textarea 
-                  rows={2}
-                  placeholder="Street, landmarks, house number..."
-                  required
-                  className="uc-input"
-                  value={address}
-                  onChange={e => setAddress(e.target.value)}
-                />
+                    <div className="shopify-summary-totals-box">
+                      <div className="uc-bill-row">
+                        <span>Subtotal</span>
+                        <span>₹{subtotal}</span>
+                      </div>
+                      <div className="uc-bill-row">
+                        <span>Convenience fee</span>
+                        <span>₹{convenienceFee}</span>
+                      </div>
+                      <div className="uc-bill-row uc-bill-total">
+                        <span>Total Payable</span>
+                        <span>₹{grandTotal}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-
-              {/* Pricing breakdown */}
-              <div className="uc-bill-box">
-                <div className="uc-bill-row">
-                  <span>Subtotal</span>
-                  <span>₹{subtotal}</span>
-                </div>
-                <div className="uc-bill-row">
-                  <span>Convenience Fee</span>
-                  <span>₹{convenienceFee}</span>
-                </div>
-                <div className="uc-bill-row uc-bill-total">
-                  <span>Final Payable Amount</span>
-                  <span>₹{grandTotal}</span>
-                </div>
-              </div>
-
-              <button type="submit" className="uc-btn-primary">
-                <MessageSquare size={16} />
-                <span>Confirm Booking via WhatsApp</span>
-              </button>
-            </form>
+            </div>
           </div>
         </div>
       )}
