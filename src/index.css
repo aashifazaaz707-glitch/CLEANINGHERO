@@ -973,7 +973,7 @@ input, textarea {
   }
   
   .header-scrolled .uc-search-container {
-    width: calc(100% - 110px);
+    width: calc(100% - 145px);
   }
 
   /* Main Layout Stacks */
