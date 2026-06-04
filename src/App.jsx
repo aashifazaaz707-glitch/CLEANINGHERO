@@ -20,14 +20,14 @@ import {
 } from 'lucide-react';
 
 const CATEGORIES = [
-  { id: "tank", label: "Tank Clean", icon: "🛢️" },
-  { id: "ac", label: "AC Repair", icon: "❄️" },
-  { id: "sofa", label: "Sofa Wash", icon: "🛋️" },
-  { id: "ro", label: "RO Purifier", icon: "💧" },
-  { id: "home", label: "Deep Clean", icon: "🏠" },
-  { id: "electric", label: "Electrician", icon: "⚡" },
-  { id: "septic", label: "Septic Tank", icon: "🚛" },
-  { id: "solar", label: "Solar Panel", icon: "☀️" },
+  { id: "tank", label: "Tank Clean", image: "https://images.unsplash.com/photo-1584486520270-19eca1efcce5?auto=format&fit=crop&w=150&h=150&q=80" },
+  { id: "ac", label: "AC Repair", image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=150&h=150&q=80" },
+  { id: "sofa", label: "Sofa Wash", image: "https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?auto=format&fit=crop&w=150&h=150&q=80" },
+  { id: "ro", label: "RO Purifier", image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=150&h=150&q=80" },
+  { id: "home", label: "Deep Clean", image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=150&h=150&q=80" },
+  { id: "electric", label: "Electrician", image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=150&h=150&q=80" },
+  { id: "septic", label: "Septic Tank", image: "https://images.unsplash.com/photo-1508873699372-7aeab60b44ab?auto=format&fit=crop&w=150&h=150&q=80" },
+  { id: "solar", label: "Solar Panel", image: "https://images.unsplash.com/photo-1509391366360-1e97d5261688?auto=format&fit=crop&w=150&h=150&q=80" },
 ];
 
 const SERVICES_DATABASE = [
@@ -354,7 +354,9 @@ export default function App() {
                 className="uc-category-btn"
                 onClick={() => handleCategoryClick(cat.id)}
               >
-                <div className="uc-category-icon-box">{cat.icon}</div>
+                <div className="uc-category-icon-box" style={{ padding: 0, overflow: 'hidden' }}>
+                  <img src={cat.image} alt={cat.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
                 <span className="uc-category-label">{cat.label}</span>
               </button>
             ))}
