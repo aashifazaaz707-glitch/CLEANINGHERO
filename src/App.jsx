@@ -124,9 +124,10 @@ const SERVICES_DATABASE = [
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedService, setSelectedService] = useState(null); // Displays dedicated service options sheet
   const [cart, setCart] = useState({});
-  const [isWizardOpen, setIsWizardOpen] = useState(false);
-  const [wizardStep, setWizardStep] = useState(1); // Steps: 1 (Services), 2 (Schedule), 3 (Info), 4 (Summary)
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false); // Checkout checkout modal
+  const [checkoutStep, setCheckoutStep] = useState(1); // Steps: 1 (Schedule), 2 (Info), 3 (Confirm Summary)
   
   const [sliderPos, setSliderPos] = useState(50);
   const [dragging, setDragging] = useState(false);
@@ -140,7 +141,7 @@ export default function App() {
 
   const sliderContainerRef = useRef(null);
 
-  // Filter trending list based on search bar query
+  // Filter trending list based on search query
   const displayedServices = SERVICES_DATABASE.filter(s => 
     s.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -184,27 +185,14 @@ export default function App() {
     return cart[key]?.qty || 0;
   };
 
-  // Add default variant to cart on click
-  const handleServiceAdd = (service) => {
-    if (service.variants && service.variants.length > 0) {
-      const firstVariant = service.variants[0];
-      const key = `${service.id}_v_${firstVariant.id}`;
-      // Add if not already selected
-      if (!cart[key]) {
-        updateCartQty(service.id, firstVariant.id, 1);
-      }
-    }
-    setIsWizardOpen(true);
-    setWizardStep(1);
-  };
-
   const handleCategoryClick = (categoryId) => {
     const service = SERVICES_DATABASE.find(s => s.id === categoryId);
     if (service) {
-      handleServiceAdd(service);
+      setSelectedService(service);
     } else {
-      setIsWizardOpen(true);
-      setWizardStep(1);
+      alert("This category service request will open directly in custom booking.");
+      setIsCheckoutOpen(true);
+      setCheckoutStep(1);
     }
   };
 
@@ -272,7 +260,7 @@ export default function App() {
     setAddress("");
     setDate("");
     setTimeSlot("");
-    setIsWizardOpen(false);
+    setIsCheckoutOpen(false);
   };
 
   return (
@@ -284,7 +272,7 @@ export default function App() {
             <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="uc-logo-img" alt="Cleaning Hero Logo" />
           </a>
 
-          {/* Compact search bar */}
+          {/* Compact search bar in header */}
           <div className="uc-search-container">
             <Search size={16} className="uc-search-icon" />
             <input 
@@ -297,7 +285,14 @@ export default function App() {
           </div>
 
           {/* Top Right Book Now Button */}
-          <button className="uc-book-now-btn" onClick={() => { setIsWizardOpen(true); setWizardStep(1); }}>
+          <button className="uc-book-now-btn" onClick={() => {
+            if (totalQty === 0) {
+              alert("Please select a service and add items to your cart first.");
+              return;
+            }
+            setIsCheckoutOpen(true);
+            setCheckoutStep(1);
+          }}>
             Book Now
           </button>
         </div>
@@ -357,7 +352,7 @@ export default function App() {
 
           <div className="uc-services-grid">
             {displayedServices.map(service => (
-              <div key={service.id} className="uc-scroller-card" onClick={() => handleServiceAdd(service)}>
+              <div key={service.id} className="uc-scroller-card" onClick={() => setSelectedService(service)}>
                 <div className="uc-scroller-img" style={{ backgroundImage: `url(${service.image})` }}></div>
                 <div className="uc-scroller-info">
                   <h3 className="uc-scroller-name">{service.name}</h3>
@@ -369,7 +364,7 @@ export default function App() {
                     <span className="uc-scroller-price">{service.priceText}</span>
                     <button className="uc-add-btn-small" onClick={(e) => {
                       e.stopPropagation();
-                      handleServiceAdd(service);
+                      setSelectedService(service);
                     }}>ADD</button>
                   </div>
                 </div>
@@ -422,8 +417,11 @@ export default function App() {
                 Our technician experts are armed with commercial high-suction extractors, cleaning shampoo disinfectants, and high-pressure steam washers. We don't just clean, we restore the factory shine of your home items.
               </p>
               <div style={{ display: 'flex', gap: '1rem' }}>
-                <button className="uc-btn-primary" onClick={() => { setIsWizardOpen(true); setWizardStep(1); }}>
-                  <Sparkles size={16} /> Book Inspection
+                <button className="uc-btn-primary" onClick={() => {
+                  const firstService = SERVICES_DATABASE[0];
+                  setSelectedService(firstService);
+                }}>
+                  <Sparkles size={16} /> Select Cleaning Services
                 </button>
               </div>
             </div>
@@ -515,84 +513,106 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Shopify-Style Multistep Checkout Modal Overlay */}
-      {isWizardOpen && (
-        <div className="shopify-modal-overlay">
-          <div className="shopify-modal-container">
-            <div className="shopify-modal-header">
-              <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="shopify-modal-logo" alt="Logo" />
-              <button className="shopify-modal-close" onClick={() => setIsWizardOpen(false)}>
-                <X size={18} />
+      {/* Dynamic Variant Selector Drawer Bottom Sheet */}
+      {selectedService && (
+        <div className="uc-bottom-sheet-overlay" onClick={() => setSelectedService(null)}>
+          <div className="uc-bottom-sheet-content" onClick={e => e.stopPropagation()}>
+            <div className="variant-selector-header">
+              <h3 className="variant-selector-title">Select {selectedService.name} Options</h3>
+              <button onClick={() => setSelectedService(null)}>
+                <X size={20} />
               </button>
             </div>
 
-            <div className="shopify-wizard-layout">
+            <p style={{ fontSize: '0.85rem', color: 'var(--brand-gray-medium)', marginBottom: '1rem' }}>
+              {selectedService.description}
+            </p>
+
+            <div>
+              {selectedService.variants.map(v => {
+                const qty = getQty(selectedService.id, v.id);
+                return (
+                  <div key={v.id} className="variant-row-item">
+                    <div className="variant-row-left">
+                      <span className="variant-row-name">{v.name}</span>
+                      <span className="variant-row-price">₹{v.price}</span>
+                    </div>
+
+                    <div>
+                      {qty > 0 ? (
+                        <div className="uc-qty-selector">
+                          <button className="uc-qty-btn" onClick={() => updateCartQty(selectedService.id, v.id, -1)}>-</button>
+                          <span className="uc-qty-val">{qty}</span>
+                          <button className="uc-qty-btn" onClick={() => updateCartQty(selectedService.id, v.id, 1)}>+</button>
+                        </div>
+                      ) : (
+                        <button className="uc-add-btn-small" onClick={() => updateCartQty(selectedService.id, v.id, 1)}>ADD</button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="sheet-action-footer">
+              <button className="btn-sheet-primary" onClick={() => {
+                setSelectedService(null);
+                if (totalQty > 0) {
+                  setIsCheckoutOpen(true);
+                  setCheckoutStep(1);
+                }
+              }}>
+                {totalQty > 0 ? `Proceed to Booking (${totalQty} items)` : "Close"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Bottom Cart Bar */}
+      {totalQty > 0 && !isCheckoutOpen && !selectedService && (
+        <div className="checkout-bar-sticky">
+          <div className="checkout-bar-left">
+            <span className="checkout-bar-qty">{totalQty} item selected</span>
+            <span className="checkout-bar-price">₹{grandTotal}</span>
+          </div>
+          <button className="btn-checkout-trigger" onClick={() => { setIsCheckoutOpen(true); setCheckoutStep(1); }}>
+            Proceed to Checkout
+          </button>
+        </div>
+      )}
+
+      {/* Shopify-Style Multistep Checkout Modal Overlay */}
+      {isCheckoutOpen && (
+        <div className="checkout-modal-overlay">
+          <div className="checkout-modal-container">
+            <div className="checkout-modal-header">
+              <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="checkout-logo" alt="Logo" />
+              <button className="checkout-close-btn" onClick={() => setIsCheckoutOpen(false)}>
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="checkout-wizard-grid">
               {/* Left Column: Multistep configuration form content */}
-              <div className="shopify-wizard-left">
-                {/* Step indicators */}
-                <div className="shopify-steps-indicator">
-                  <div className={`shopify-step-node ${wizardStep === 1 ? 'active' : ''} ${wizardStep > 1 ? 'completed' : ''}`}>
-                    <div className="shopify-step-circle">1</div>
-                    <span className="shopify-step-label">Services</span>
-                  </div>
-                  <div className={`shopify-step-node ${wizardStep === 2 ? 'active' : ''} ${wizardStep > 2 ? 'completed' : ''}`}>
-                    <div className="shopify-step-circle">2</div>
-                    <span className="shopify-step-label">Schedule</span>
-                  </div>
-                  <div className={`shopify-step-node ${wizardStep === 3 ? 'active' : ''} ${wizardStep > 3 ? 'completed' : ''}`}>
-                    <div className="shopify-step-circle">3</div>
-                    <span className="shopify-step-label">Info</span>
-                  </div>
-                  <div className={`shopify-step-node ${wizardStep === 4 ? 'active' : ''}`}>
-                    <div className="shopify-step-circle">4</div>
-                    <span className="shopify-step-label">Confirm</span>
-                  </div>
+              <div className="checkout-wizard-body">
+                {/* Step indicator header */}
+                <div className="checkout-step-progress-header">
+                  <span>Step {checkoutStep} of 3</span>
+                  <span>
+                    {checkoutStep === 1 && "Choose Appointment Slot"}
+                    {checkoutStep === 2 && "Billing Address"}
+                    {checkoutStep === 3 && "Confirm Booking"}
+                  </span>
                 </div>
 
                 {/* Form Step Content */}
-                {wizardStep === 1 && (
+                {checkoutStep === 1 && (
                   <div>
-                    <h3 className="shopify-form-title">Select Cleaning Services</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                      {SERVICES_DATABASE.map(service => (
-                        <div key={service.id} className="shopify-service-row" style={{ display: 'block' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div className="shopify-service-details">
-                              <h4>{service.name}</h4>
-                              <p>{service.description}</p>
-                            </div>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--brand-blue)' }}>
-                              {service.priceText}
-                            </span>
-                          </div>
-
-                          <div className="shopify-variants-box">
-                            {service.variants.map(v => {
-                              const qty = getQty(service.id, v.id);
-                              return (
-                                <div key={v.id} className="shopify-variant-line">
-                                  <span>{v.name} (₹{v.price})</span>
-                                  <div className="uc-qty-selector">
-                                    <button type="button" className="uc-qty-btn" onClick={() => updateCartQty(service.id, v.id, -1)}>-</button>
-                                    <span className="uc-qty-val">{qty}</span>
-                                    <button type="button" className="uc-qty-btn" onClick={() => updateCartQty(service.id, v.id, 1)}>+</button>
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {wizardStep === 2 && (
-                  <div>
-                    <h3 className="shopify-form-title">Select Appointment Schedule</h3>
+                    <h3 className="checkout-step-title">Select Appointment Schedule</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                       <div className="uc-input-group">
-                        <label className="uc-input-label">Date</label>
+                        <label className="uc-input-label">Preferred Date</label>
                         <input 
                           type="date" 
                           required
@@ -620,9 +640,9 @@ export default function App() {
                   </div>
                 )}
 
-                {wizardStep === 3 && (
+                {checkoutStep === 2 && (
                   <div>
-                    <h3 className="shopify-form-title">Contact & Location Info</h3>
+                    <h3 className="checkout-step-title">Contact & Location Info</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                       <div className="uc-input-group">
                         <label className="uc-input-label">Your Name</label>
@@ -663,9 +683,9 @@ export default function App() {
                   </div>
                 )}
 
-                {wizardStep === 4 && (
+                {checkoutStep === 3 && (
                   <div>
-                    <h3 className="shopify-form-title">Review & Place Reservation</h3>
+                    <h3 className="checkout-step-title">Review & Place Reservation</h3>
                     <p style={{ color: 'var(--brand-gray-medium)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
                       Please review your booking details on the right summary panel. Click the confirmation button below to send your reservation request directly to our dispatch office via WhatsApp.
                     </p>
@@ -680,31 +700,30 @@ export default function App() {
                 )}
 
                 {/* Footer buttons actions inside wizard */}
-                <div className="shopify-wizard-footer">
-                  {wizardStep > 1 && (
-                    <button type="button" className="btn-wizard-back" onClick={() => setWizardStep(prev => prev - 1)}>
+                <div className="checkout-wizard-footer">
+                  {checkoutStep > 1 ? (
+                    <button type="button" className="btn-wizard-back" onClick={() => setCheckoutStep(prev => prev - 1)}>
                       Back
                     </button>
+                  ) : (
+                    <button type="button" className="btn-wizard-back" onClick={() => setIsCheckoutOpen(false)}>
+                      Cancel
+                    </button>
                   )}
-                  {wizardStep < 4 ? (
+                  {checkoutStep < 3 ? (
                     <button 
                       type="button" 
                       className="btn-wizard-next" 
-                      style={{ marginLeft: wizardStep === 1 ? 'auto' : '0' }}
                       onClick={() => {
-                        if (wizardStep === 1 && totalQty === 0) {
-                          alert("Please add at least one service variant to continue!");
+                        if (checkoutStep === 1 && (!date || !timeSlot)) {
+                          alert("Please select a date and preferred time slot!");
                           return;
                         }
-                        if (wizardStep === 2 && (!date || !timeSlot)) {
-                          alert("Please select date and preferred time slot!");
-                          return;
-                        }
-                        if (wizardStep === 3 && (!name || !phone || !address)) {
+                        if (checkoutStep === 2 && (!name || !phone || !address)) {
                           alert("Please fill out all address and contact details!");
                           return;
                         }
-                        setWizardStep(prev => prev + 1);
+                        setCheckoutStep(prev => prev + 1);
                       }}
                     >
                       Continue
@@ -718,7 +737,7 @@ export default function App() {
               </div>
 
               {/* Right Column: Dynamic Shopify Style Cart Summary panel */}
-              <div className="shopify-wizard-right">
+              <div className="checkout-wizard-sidebar">
                 <h3 className="shopify-checkout-summary-title">Order Summary</h3>
                 
                 {addedItems.length === 0 ? (
@@ -757,7 +776,7 @@ export default function App() {
                       </div>
                     )}
 
-                    <div className="shopify-summary-totals-box">
+                    <div className="uc-bill-box">
                       <div className="uc-bill-row">
                         <span>Subtotal</span>
                         <span>₹{subtotal}</span>

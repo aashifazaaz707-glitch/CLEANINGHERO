@@ -37,7 +37,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, .logo-text, .uc-section-title, .shopify-step-title {
+h1, h2, h3, h4, h5, .logo-text, .uc-section-title, .checkout-step-title {
   font-family: var(--font-family-title);
 }
 
@@ -139,10 +139,6 @@ input, textarea {
   transform: translateY(-50%);
   color: var(--brand-gray-medium);
   transition: var(--transition-smooth);
-}
-
-.uc-search-input:focus + .uc-search-icon {
-  color: var(--brand-blue);
 }
 
 /* Header Booking CTA Button */
@@ -424,270 +420,37 @@ input, textarea {
   margin-top: 0.35rem;
 }
 
-/* Shopify style Multistep Checkout Modal */
-.shopify-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(11, 15, 25, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.shopify-modal-container {
-  background-color: var(--brand-white);
-  width: 95%;
-  max-width: 960px;
-  height: 90vh;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border: 1px solid var(--brand-border);
-  animation: scaleUpBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.shopify-modal-header {
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid var(--brand-border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.shopify-modal-logo {
-  height: 34px;
-}
-
-.shopify-modal-close {
-  color: var(--brand-navy);
-  background-color: var(--brand-gray-light);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition-smooth);
-}
-
-.shopify-modal-close:hover {
-  background-color: var(--brand-border);
-  transform: rotate(90deg);
-}
-
-/* Shopify Multistep Wizard Layout */
-.shopify-wizard-layout {
+/* Trust Grid */
+.uc-trust-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr; /* Left section content form, right section cart summary */
-  flex: 1;
-  overflow: hidden;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
 }
 
-.shopify-wizard-left {
-  padding: 2rem;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid var(--brand-border);
-}
-
-.shopify-wizard-right {
-  padding: 2rem;
-  background-color: var(--brand-gray-light);
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Step indicator bar */
-.shopify-steps-indicator {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  position: relative;
-}
-
-.shopify-steps-indicator::before {
-  content: '';
-  position: absolute;
-  top: 14px;
-  left: 20px;
-  right: 20px;
-  height: 2px;
-  background-color: var(--brand-border);
-  z-index: 0;
-}
-
-.shopify-step-node {
-  position: relative;
-  z-index: 1;
+.uc-trust-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.shopify-step-circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: var(--brand-white);
-  border: 2px solid var(--brand-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: var(--brand-gray-medium);
-  transition: var(--transition-smooth);
-}
-
-.shopify-step-node.active .shopify-step-circle {
-  border-color: var(--brand-blue);
-  color: var(--brand-blue);
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-}
-
-.shopify-step-node.completed .shopify-step-circle {
-  background-color: var(--brand-blue);
-  border-color: var(--brand-blue);
-  color: var(--brand-white);
-}
-
-.shopify-step-label {
-  font-size: 0.7rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--brand-gray-medium);
-}
-
-.shopify-step-node.active .shopify-step-label {
-  color: var(--brand-blue);
-}
-
-/* Step 1: Shopify style Catalog list */
-.shopify-service-row {
-  background-color: var(--brand-white);
-  border: 1px solid var(--brand-border);
-  border-radius: var(--radius-md);
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: var(--transition-smooth);
-}
-
-.shopify-service-row:hover {
-  border-color: var(--brand-blue);
-  box-shadow: var(--shadow-sm);
-}
-
-.shopify-service-details h4 {
-  font-size: 1rem;
-  font-weight: 800;
-}
-
-.shopify-service-details p {
-  font-size: 0.8rem;
-  color: var(--brand-gray-medium);
-  margin-top: 0.25rem;
-}
-
-.shopify-variants-box {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--brand-border);
-  display: flex;
-  flex-direction: column;
+  text-align: center;
   gap: 0.75rem;
-}
-
-.shopify-variant-line {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-}
-
-/* Step forms styling */
-.shopify-form-title {
-  font-size: 1.35rem;
-  font-weight: 900;
-  margin-bottom: 1.25rem;
-}
-
-/* Wizard Button Actions footer */
-.shopify-wizard-footer {
-  margin-top: auto;
-  padding-top: 2rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-.btn-wizard-back {
   background-color: var(--brand-gray-light);
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--brand-border);
-  color: var(--brand-navy);
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-size: 0.9rem;
-  font-weight: 700;
 }
 
-.btn-wizard-next {
-  background-color: var(--brand-blue);
-  color: var(--brand-white);
-  padding: 0.75rem 1.75rem;
-  border-radius: var(--radius-md);
+.uc-trust-icon {
+  color: var(--brand-blue);
+}
+
+.uc-trust-info h5 {
   font-size: 0.9rem;
   font-weight: 800;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
 }
 
-.btn-wizard-next:hover {
-  background-color: var(--brand-blue-hover);
-}
-
-/* Right Section Cart Summary (Shopify Checkout Look) */
-.shopify-checkout-summary-title {
-  font-size: 1.15rem;
-  font-weight: 800;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--brand-border);
-  margin-bottom: 1.25rem;
-}
-
-.shopify-summary-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  font-size: 0.85rem;
-}
-
-.shopify-summary-item-name {
-  font-weight: 700;
-}
-
-.shopify-summary-item-desc {
+.uc-trust-info p {
   font-size: 0.75rem;
   color: var(--brand-gray-medium);
-}
-
-.shopify-summary-totals-box {
-  margin-top: auto;
-  border-top: 1.5px solid var(--brand-border);
-  padding-top: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
 }
 
 /* Footer structure */
@@ -748,57 +511,407 @@ input, textarea {
   font-size: 0.85rem;
 }
 
-/* Responsive configurations */
+/* Bottom Sheet / Drawer Modal styling for Service Variant Selection */
+.uc-bottom-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(11, 15, 25, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 500;
+  display: flex;
+  align-items: flex-end; /* Always bottom sheet on mobile, centered on desktop handled below */
+  justify-content: center;
+}
+
+.uc-bottom-sheet-content {
+  background-color: var(--brand-white);
+  width: 100%;
+  max-width: 500px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 1.5rem 1.25rem;
+  box-shadow: var(--shadow-xl);
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideUpMobile 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.variant-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--brand-border);
+  margin-bottom: 1.25rem;
+}
+
+.variant-selector-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.variant-row-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--brand-border);
+}
+
+.variant-row-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.variant-row-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.variant-row-price {
+  font-weight: 800;
+  color: var(--brand-blue);
+  font-size: 0.9rem;
+  margin-top: 0.15rem;
+}
+
+.uc-qty-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--brand-blue);
+  border-radius: var(--radius-sm);
+  background-color: var(--brand-blue-light);
+  overflow: hidden;
+}
+
+.uc-qty-btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-blue);
+  font-weight: 800;
+}
+
+.uc-qty-val {
+  padding: 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--brand-blue);
+}
+
+.sheet-action-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-sheet-primary {
+  flex: 1;
+  background-color: var(--brand-blue);
+  color: white;
+  padding: 0.85rem;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Shopify-style Compact/Responsive Wizard modal */
+.checkout-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(11, 15, 25, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkout-modal-container {
+  background-color: var(--brand-white);
+  width: 100%;
+  height: 100%; /* Default full-screen on mobile */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.checkout-modal-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--brand-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--brand-white);
+}
+
+.checkout-logo {
+  height: 32px;
+}
+
+.checkout-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--brand-gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-navy);
+}
+
+/* Responsive checkout wizard grid flow */
+.checkout-wizard-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Single column on mobile to avoid cramped text */
+  flex: 1;
+  overflow: hidden;
+}
+
+.checkout-wizard-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.checkout-wizard-sidebar {
+  padding: 1.5rem;
+  background-color: var(--brand-gray-light);
+  border-top: 1px solid var(--brand-border);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Step header indicators for mobile */
+.checkout-step-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--brand-blue-light);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--brand-blue);
+}
+
+.checkout-step-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+/* Form Styles */
+.uc-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.uc-input-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--brand-gray-dark);
+}
+
+.uc-input {
+  background-color: var(--brand-gray-light);
+  border: 1.5px solid var(--brand-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.uc-input:focus {
+  border-color: var(--brand-blue);
+  background-color: var(--brand-white);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+}
+
+.uc-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.uc-slot-btn {
+  background-color: var(--brand-gray-light);
+  border: 1px solid transparent;
+  padding: 0.6rem 0.25rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.uc-slot-btn.active {
+  background-color: var(--brand-blue-light);
+  border-color: var(--brand-blue);
+  color: var(--brand-blue);
+}
+
+.uc-bill-box {
+  background-color: var(--brand-white);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.uc-bill-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--brand-gray-medium);
+}
+
+.uc-bill-total {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--brand-navy);
+  border-top: 1px solid var(--brand-border);
+  padding-top: 0.5rem;
+}
+
+.checkout-wizard-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+
+.btn-wizard-back {
+  background-color: var(--brand-gray-light);
+  border: 1px solid var(--brand-border);
+  color: var(--brand-navy);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.btn-wizard-next {
+  background-color: var(--brand-blue);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+}
+
+/* Floating Bottom Action/Checkout bar */
+.checkout-bar-sticky {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--brand-navy);
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 400;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+}
+
+.checkout-bar-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-bar-qty {
+  font-size: 0.75rem;
+  color: var(--brand-gray-medium);
+  text-transform: uppercase;
+}
+
+.checkout-bar-price {
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+.btn-checkout-trigger {
+  background-color: var(--brand-blue);
+  color: white;
+  padding: 0.65rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+/* Animations */
+@keyframes slideUpMobile {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes scaleUpBounce {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Desktop layout optimizations (Multi-screen optimized) */
+@media (min-width: 768px) {
+  /* Center Bottom Sheet on Desktop */
+  .uc-bottom-sheet-overlay {
+    align-items: center;
+  }
+  .uc-bottom-sheet-content {
+    border-radius: var(--radius-lg);
+    max-height: 90vh;
+    animation: scaleUpBounce 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  /* Desktop sized modal checkout instead of fullscreen */
+  .checkout-modal-overlay {
+    background-color: rgba(11, 15, 25, 0.5);
+  }
+  .checkout-modal-container {
+    width: 90%;
+    max-width: 920px;
+    height: 85vh;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+  }
+  .checkout-wizard-grid {
+    grid-template-columns: 1.4fr 1fr; /* Two-column on desktop */
+  }
+  .checkout-wizard-sidebar {
+    border-top: none;
+    border-left: 1px solid var(--brand-border);
+    max-height: 100%;
+    overflow-y: auto;
+  }
+}
+
+/* Media wrapping adjustments */
 @media (max-width: 992px) {
-  .shopify-wizard-layout {
-    grid-template-columns: 1fr; /* Stack layout on tablet/mobile checkout view */
-  }
-  .shopify-wizard-left {
-    border-right: none;
-    border-bottom: 1px solid var(--brand-border);
-    max-height: 50vh;
-  }
-  .shopify-wizard-right {
-    max-height: 40vh;
-  }
   .uc-categories-grid {
     grid-template-columns: repeat(6, 1fr);
   }
   .uc-services-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .uc-header .container {
-    gap: 0.75rem;
-  }
-  .uc-categories-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  .uc-services-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .uc-promo-grid {
-    grid-template-columns: 1fr;
-  }
-  .uc-footer-grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
+  .uc-trust-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 576px) {
-  .uc-header .container {
-    flex-wrap: wrap;
-    justify-content: space-between;
+  .uc-categories-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
-  .uc-search-container {
-    order: 3; /* Push search bar below on mobile sizes */
-    max-width: 100%;
-  }
-  .shopify-modal-container {
-    height: 100vh;
-    border-radius: 0;
+  .uc-services-grid {
+    grid-template-columns: 1fr;
   }
 }
