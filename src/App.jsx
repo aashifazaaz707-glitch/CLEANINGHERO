@@ -36,7 +36,7 @@ const SERVICES_DATABASE = [
     reviews: 6,
     time: "30-45 min",
     priceText: "₹499 onwards",
-    image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=400",
+    image: "https://pub-b10e6c23639e487cbdffb78ad4b06d68.r2.dev/clean-tank-img.jpeg",
     description: "Deep chemical sanitization using state of the art vacuum pumping machine.",
     whatsIncluded: [
       "Sludge and sediment pumping",
@@ -124,7 +124,7 @@ const SERVICES_DATABASE = [
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedService, setSelectedService] = useState(null); // Displays dedicated service options sheet
+  const [selectedService, setSelectedService] = useState(null); // Dedicated variant selection sheet
   const [cart, setCart] = useState({});
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false); // Checkout checkout modal
   const [checkoutStep, setCheckoutStep] = useState(1); // Steps: 1 (Schedule), 2 (Info), 3 (Confirm Summary)
@@ -272,7 +272,7 @@ export default function App() {
             <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="uc-logo-img" alt="Cleaning Hero Logo" />
           </a>
 
-          {/* Compact search bar in header */}
+          {/* Compact search bar */}
           <div className="uc-search-container">
             <Search size={16} className="uc-search-icon" />
             <input 
@@ -314,7 +314,7 @@ export default function App() {
 
             <div 
               className="uc-promo-banner" 
-              style={{ backgroundImage: `url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600')` }}
+              style={{ backgroundImage: `url('https://pub-b10e6c23639e487cbdffb78ad4b06d68.r2.dev/clean-tank-img.jpeg')` }}
             >
               <div className="uc-promo-content">
                 <div className="uc-promo-title">Pure Tank Guarantee</div>
@@ -374,7 +374,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Before / After Drag Slider widget */}
+      {/* Before / After Drag Slider widget (Water Tank Cleaned vs Dirty comparison) */}
       <section className="uc-section">
         <div className="container">
           <div className="uc-slider-layout">
@@ -384,15 +384,17 @@ export default function App() {
                 ref={sliderContainerRef}
                 onTouchMove={handleTouch}
               >
+                {/* Cleaned tank state */}
                 <div 
                   className="uc-slider-img"
-                  style={{ backgroundImage: `url('https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&q=80&w=600')` }}
+                  style={{ backgroundImage: `url('https://pub-b10e6c23639e487cbdffb78ad4b06d68.r2.dev/clean-tank-img.jpeg')` }}
                 ></div>
                 
+                {/* Dirty tank state overlay */}
                 <div 
                   className="uc-slider-img"
                   style={{ 
-                    backgroundImage: `url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80&w=600')`,
+                    backgroundImage: `url('https://pub-b10e6c23639e487cbdffb78ad4b06d68.r2.dev/dirty-tank-img.jpeg')`,
                     width: `${sliderPos}%`
                   }}
                 ></div>
@@ -406,8 +408,8 @@ export default function App() {
                 </div>
               </div>
               <div className="uc-slider-info">
-                <h4 className="uc-slider-title">Expert Sofa Stain & Dust Extraction</h4>
-                <p className="uc-slider-desc">Drag the separator bar to see our sofa cleaning difference.</p>
+                <h4 className="uc-slider-title">Expert Water Tank Deep Cleaning</h4>
+                <p className="uc-slider-desc">Drag the separator bar to see our water tank cleaning difference.</p>
               </div>
             </div>
 
