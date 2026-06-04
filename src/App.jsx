@@ -14,7 +14,8 @@ import {
   Info, 
   Sparkles,
   MessageSquare,
-  Bookmark
+  Bookmark,
+  Trash2
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -652,7 +653,7 @@ export default function App() {
                         <label className="uc-input-label">Your Name</label>
                         <input 
                           type="text" 
-                          placeholder="e.g. Asif Raza" 
+                          placeholder="e.g. Your Name" 
                           required
                           className="uc-input"
                           value={name}
@@ -750,14 +751,23 @@ export default function App() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', flex: '1' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                       {addedItems.map(item => (
-                        <div key={item.key} className="shopify-summary-item">
+                        <div key={item.key} className="shopify-summary-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <div>
-                            <span className="shopify-summary-item-name">{item.service.name}</span>
-                            <div className="shopify-summary-item-desc">
+                            <span className="shopify-summary-item-name" style={{ fontWeight: '700', fontSize: '0.9rem' }}>{item.service.name}</span>
+                            <div className="shopify-summary-item-desc" style={{ color: 'var(--brand-gray-medium)', fontSize: '0.8rem' }}>
                               {item.variant.name} (x{item.qty})
                             </div>
                           </div>
-                          <span style={{ fontWeight: '800' }}>₹{item.price * item.qty}</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <span style={{ fontWeight: '800' }}>₹{item.price * item.qty}</span>
+                            <button 
+                              onClick={() => updateCartQty(item.service.id, item.variant.id, -item.qty)}
+                              style={{ color: '#ef4444', display: 'flex', alignItems: 'center' }}
+                              title="Remove item"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
