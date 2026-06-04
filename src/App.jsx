@@ -15,7 +15,8 @@ import {
   Sparkles,
   MessageSquare,
   Bookmark,
-  Trash2
+  Trash2,
+  MessageCircle
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -134,8 +135,7 @@ export default function App() {
   const [dragging, setDragging] = useState(false);
 
   // Scroll tracking for header
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Form Details
   const [name, setName] = useState("");
@@ -233,18 +233,12 @@ export default function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsHeaderVisible(false); // Scrolling down
-      } else {
-        setIsHeaderVisible(true); // Scrolling up
-      }
-      setLastScrollY(currentScrollY);
+      setIsScrolled(window.scrollY > 40);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   const submitBooking = (e) => {
     if (e && e.preventDefault) e.preventDefault();
@@ -286,8 +280,8 @@ export default function App() {
   return (
     <div className="app-layout">
       {/* Header */}
-      <header className={`uc-header ${isHeaderVisible ? '' : 'header-hidden'}`}>
-        <div className="container">
+      <header className={`uc-header ${isScrolled ? 'header-scrolled' : ''}`}>
+        <div className="container header-grid-anim">
           <a href="#" className="uc-brand-logo">
             <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="uc-logo-img" alt="Cleaning Hero Logo" />
           </a>
@@ -488,6 +482,27 @@ export default function App() {
                 <p>If not 100% satisfied, we will re-wash for free.</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Can't Find What You're Looking For / WhatsApp CTA */}
+      <section className="uc-section" style={{ backgroundColor: 'var(--brand-white)' }}>
+        <div className="container">
+          <div className="uc-whatsapp-cta">
+            <div className="uc-whatsapp-content">
+              <h3>Can't find what you are looking for?</h3>
+              <p>Connect with our expert support team directly on WhatsApp for custom requests and immediate assistance.</p>
+            </div>
+            <a 
+              href="https://wa.me/919031116900?text=Hi%20Cleaning%20Hero,%20I%20have%20a%20custom%20service%20request." 
+              target="_blank" 
+              rel="noreferrer"
+              className="uc-whatsapp-btn"
+            >
+              <MessageCircle size={20} />
+              <span>Connect on WhatsApp</span>
+            </a>
           </div>
         </div>
       </section>
