@@ -691,9 +691,6 @@ export default function App() {
                 {checkoutStep === 3 && (
                   <div>
                     <h3 className="checkout-step-title">Review & Place Reservation</h3>
-                    <p style={{ color: 'var(--brand-gray-medium)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-                      Please review your booking details on the right summary panel. Click the confirmation button below to send your reservation request directly to our dispatch office via WhatsApp.
-                    </p>
                     <div className="uc-trust-item" style={{ flexDirection: 'row', textAlign: 'left', gap: '1rem', padding: '1rem' }}>
                       <ShieldCheck size={28} className="uc-trust-icon" />
                       <div>
@@ -704,18 +701,18 @@ export default function App() {
                   </div>
                 )}
 
-                {/* Footer buttons actions inside wizard */}
-                <div className="checkout-wizard-footer">
-                  {checkoutStep > 1 ? (
-                    <button type="button" className="btn-wizard-back" onClick={() => setCheckoutStep(prev => prev - 1)}>
-                      Back
-                    </button>
-                  ) : (
-                    <button type="button" className="btn-wizard-back" onClick={() => setIsCheckoutOpen(false)}>
-                      Cancel
-                    </button>
-                  )}
-                  {checkoutStep < 3 ? (
+                {/* Footer buttons actions inside wizard (Steps 1 & 2 only) */}
+                {checkoutStep < 3 && (
+                  <div className="checkout-wizard-footer">
+                    {checkoutStep > 1 ? (
+                      <button type="button" className="btn-wizard-back" onClick={() => setCheckoutStep(prev => prev - 1)}>
+                        Back
+                      </button>
+                    ) : (
+                      <button type="button" className="btn-wizard-back" onClick={() => setIsCheckoutOpen(false)}>
+                        Cancel
+                      </button>
+                    )}
                     <button 
                       type="button" 
                       className="btn-wizard-next" 
@@ -733,12 +730,8 @@ export default function App() {
                     >
                       Continue
                     </button>
-                  ) : (
-                    <button type="button" className="btn-wizard-next" onClick={submitBooking}>
-                      Place Booking Order
-                    </button>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
               {/* Right Column: Dynamic Shopify Style Cart Summary panel */}
@@ -784,7 +777,7 @@ export default function App() {
                     {/* Customer detail recap */}
                     {name && (
                       <div style={{ borderTop: '1px solid var(--brand-border)', paddingTop: '1rem', fontSize: '0.8rem' }}>
-                        <div style={{ fontWeight: 800, marginBottom: '0.25rem' }}>Ship To</div>
+                        <div style={{ fontWeight: 800, marginBottom: '0.25rem' }}>Booking Address</div>
                         <div>{name} ({phone})</div>
                         <div style={{ wordBreak: 'break-all' }}>{address}</div>
                       </div>
@@ -804,6 +797,18 @@ export default function App() {
                         <span>₹{grandTotal}</span>
                       </div>
                     </div>
+
+                    {/* Step 3 Final Checkout Buttons inside Order Summary */}
+                    {checkoutStep === 3 && (
+                      <div className="checkout-wizard-footer" style={{ marginTop: '0' }}>
+                        <button type="button" className="btn-wizard-back" onClick={() => setCheckoutStep(prev => prev - 1)}>
+                          Back
+                        </button>
+                        <button type="button" className="btn-wizard-next" onClick={submitBooking}>
+                          Place Booking Order
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
