@@ -133,6 +133,10 @@ export default function App() {
   const [sliderPos, setSliderPos] = useState(50);
   const [dragging, setDragging] = useState(false);
 
+  // Scroll tracking for header
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
   // Form Details
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -227,6 +231,21 @@ export default function App() {
     };
   }, [dragging]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsHeaderVisible(false); // Scrolling down
+      } else {
+        setIsHeaderVisible(true); // Scrolling up
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
   const submitBooking = (e) => {
     if (e && e.preventDefault) e.preventDefault();
 
@@ -267,7 +286,7 @@ export default function App() {
   return (
     <div className="app-layout">
       {/* Header */}
-      <header className="uc-header">
+      <header className={`uc-header ${isHeaderVisible ? '' : 'header-hidden'}`}>
         <div className="container">
           <a href="#" className="uc-brand-logo">
             <img src="https://cleaninghero.in/cleaning-hero-logo.png" className="uc-logo-img" alt="Cleaning Hero Logo" />
