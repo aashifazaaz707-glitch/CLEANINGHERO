@@ -384,20 +384,22 @@ export default function App() {
                 ref={sliderContainerRef}
                 onTouchMove={handleTouch}
               >
-                {/* Cleaned tank state */}
-                <div 
-                  className="uc-slider-img"
-                  style={{ backgroundImage: `url('https://pub-b10e6c23639e487cbdffb78ad4b06d68.r2.dev/clean-tank-img.jpeg')` }}
-                ></div>
+                {/* Background: Dirty tank (Before) */}
+                <img 
+                  className="uc-slider-img-background"
+                  src="https://pub-b10e6c23639e487cbdffb78ad4b06d68.r2.dev/dirty-tank-img.jpeg"
+                  alt="Dirty Tank Before"
+                  draggable={false}
+                />
                 
-                {/* Dirty tank state overlay */}
-                <div 
-                  className="uc-slider-img"
-                  style={{ 
-                    backgroundImage: `url('https://pub-b10e6c23639e487cbdffb78ad4b06d68.r2.dev/dirty-tank-img.jpeg')`,
-                    width: `${sliderPos}%`
-                  }}
-                ></div>
+                {/* Foreground: Clean tank (After) with clip path */}
+                <img 
+                  className="uc-slider-img-foreground"
+                  src="https://pub-b10e6c23639e487cbdffb78ad4b06d68.r2.dev/clean-tank-img.jpeg"
+                  alt="Clean Tank After"
+                  draggable={false}
+                  style={{ clipPath: `polygon(0 0, ${sliderPos}% 0, ${sliderPos}% 100%, 0 100%)` }}
+                />
 
                 <div 
                   className="uc-slider-bar"
@@ -739,7 +741,7 @@ export default function App() {
               </div>
 
               {/* Right Column: Dynamic Shopify Style Cart Summary panel */}
-              <div className="checkout-wizard-sidebar">
+              <div className={`checkout-wizard-sidebar ${checkoutStep < 3 ? 'mobile-hidden' : ''}`}>
                 <h3 className="shopify-checkout-summary-title">Order Summary</h3>
                 
                 {addedItems.length === 0 ? (
