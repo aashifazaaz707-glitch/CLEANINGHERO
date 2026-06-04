@@ -916,21 +916,34 @@ input, textarea {
 
 /* Media wrapping adjustments */
 @media (max-width: 992px) {
-  .uc-categories-grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-  .uc-services-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .uc-trust-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .uc-categories-grid { grid-template-columns: repeat(4, 1fr); }
+  .uc-services-grid { grid-template-columns: repeat(2, 1fr); }
+  .uc-trust-grid { grid-template-columns: repeat(2, 1fr); }
+  .uc-footer-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
 }
 
 @media (max-width: 767px) {
   .mobile-hidden {
     display: none !important;
   }
+  
+  /* Header Fixes */
+  .uc-header .container {
+    flex-wrap: wrap; 
+    gap: 1rem;
+  }
+  .uc-search-container {
+    order: 3; 
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* Main Layout Stacks */
+  .uc-promo-grid { grid-template-columns: 1fr; }
+  .uc-services-grid { grid-template-columns: 1fr; }
+  .uc-trust-grid { grid-template-columns: 1fr; }
+  .uc-footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  
   .uc-slider-layout {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -941,11 +954,8 @@ input, textarea {
 }
 
 @media (max-width: 576px) {
-  .uc-categories-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  .uc-services-grid {
-    grid-template-columns: 1fr;
-  }
+  /* Smaller phones */
+  .uc-categories-grid { grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+  .uc-category-icon-box { width: 55px; height: 55px; font-size: 1.5rem; }
+  .uc-category-label { font-size: 0.75rem; }
 }
-
