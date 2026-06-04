@@ -696,7 +696,7 @@ input, textarea {
 }
 
 .checkout-wizard-body {
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 0 1.5rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -810,7 +810,12 @@ input, textarea {
   display: flex;
   justify-content: space-between;
   margin-top: auto;
-  padding-top: 1.5rem;
+  padding: 1.5rem 0;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--brand-white);
+  z-index: 20;
+  border-top: 1px solid var(--brand-border);
 }
 
 .btn-wizard-back {
