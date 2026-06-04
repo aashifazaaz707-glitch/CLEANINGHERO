@@ -233,7 +233,12 @@ export default function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      const scrollY = window.scrollY;
+      if (scrollY > 80) {
+        setIsScrolled(true);
+      } else if (scrollY < 20) {
+        setIsScrolled(false);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
