@@ -16,7 +16,9 @@ import {
   MessageSquare,
   Bookmark,
   Trash2,
-  MessageCircle
+  MessageCircle,
+  Users,
+  CheckCircle2
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -32,94 +34,89 @@ const CATEGORIES = [
 
 const SERVICES_DATABASE = [
   {
+    id: "sofa",
+    name: "Sofa Cleaning",
+    rating: 4.9,
+    reviews: 124,
+    time: "60-90 Min",
+    teamSize: "1 Hero Pro Team",
+    priceText: "Starts from ₹499",
+    image: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=400",
+    description: "Multi-stage shampoo wash to extract grease, sweat stains, and dust.",
+    badges: ["Best Value", "Same Day"],
+    highlights: ["Deep Scrubbing", "Sanitization"],
+    variants: [
+      { id: "s_3seat", name: "3 Seater Sofa", price: 499 },
+      { id: "s_5seat", name: "5 Seater Sofa", price: 899 }
+    ]
+  },
+  {
+    id: "septic",
+    name: "Septic Tank Cleaning",
+    rating: 4.9,
+    reviews: 82,
+    time: "4-5 Hour",
+    teamSize: "3 Hero Pro Team",
+    priceText: "Starts from ₹1999",
+    image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=400",
+    description: "Professional sludge pumping and safe disposal.",
+    badges: ["Best Value", "Same Day"],
+    highlights: ["Deep Scrubbing", "Sanitization"],
+    variants: [
+      { id: "septic_std", name: "Standard Tank", price: 1999 },
+      { id: "septic_lrg", name: "Large Tank", price: 2999 }
+    ]
+  },
+  {
+    id: "solar",
+    name: "Solar Panel Cleaning",
+    rating: 4.9,
+    reviews: 51,
+    time: "45-60 Min",
+    teamSize: "2 Hero Pro Team",
+    priceText: "Starts from ₹799",
+    image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=400",
+    description: "Increase energy efficiency with dust and debris removal.",
+    badges: ["Best Value", "Same Day"],
+    highlights: ["Professional Equipment", "Eco-friendly Chemicals"],
+    variants: [
+      { id: "solar_1", name: "Up to 5 Panels", price: 799 },
+      { id: "solar_2", name: "6 to 10 Panels", price: 1299 }
+    ]
+  },
+  {
+    id: "aquarium",
+    name: "Aquarium Cleaning",
+    rating: 5.0,
+    reviews: 19,
+    time: "30-45 Minutes",
+    teamSize: "1 Hero Pro Team",
+    priceText: "Starts from ₹499",
+    image: "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&q=80&w=400",
+    description: "Comprehensive tank wash and water conditioning.",
+    badges: ["Trending"],
+    highlights: ["Deep Scrubbing", "Sanitization"],
+    variants: [
+      { id: "aq_sml", name: "Small Tank", price: 499 },
+      { id: "aq_lrg", name: "Large Tank", price: 799 }
+    ]
+  },
+  {
     id: "tank",
     name: "Water Tank Cleaning",
     rating: 5.0,
     reviews: 6,
     time: "30-45 min",
-    priceText: "₹499 onwards",
+    teamSize: "2 Hero Pro Team",
+    priceText: "Starts from ₹499",
     image: "https://pub-b10e6c23639e487cbdffb78ad4b06d68.r2.dev/clean-tank-img.jpeg",
     description: "Deep chemical sanitization using state of the art vacuum pumping machine.",
-    whatsIncluded: [
-      "Sludge and sediment pumping",
-      "High-pressure wall scrubbing",
-      "Eco-friendly anti-bacterial coating"
-    ],
-    whatsExcluded: [
-      "Plumbing repairs",
-      "Exterior tank washing"
-    ],
+    badges: ["Bestseller", "Same Day"],
+    highlights: ["Sludge pumping", "Anti-bacterial coating"],
     variants: [
-      { id: "t_500", name: "500L Tank Capacity", price: 499 },
-      { id: "t_1000", name: "1000L Tank Capacity", price: 799 },
-      { id: "t_1500", name: "1500L Tank Capacity", price: 1099 }
-    ]
-  },
-  {
-    id: "ac",
-    name: "AC Jet Service",
-    rating: 4.9,
-    reviews: 62,
-    time: "40 min",
-    priceText: "₹399 onwards",
-    image: "https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?auto=format&fit=crop&q=80&w=400",
-    description: "High pressure power-jet deep wash for filters and cooling coils.",
-    whatsIncluded: [
-      "Indoor filter & coil jet washing",
-      "Drain pipe block clearance",
-      "Refrigerant gas checkup"
-    ],
-    whatsExcluded: [
-      "Gas refilling",
-      "Spare part replacement"
-    ],
-    variants: [
-      { id: "ac_split", name: "Split AC Jet Service", price: 399 },
-      { id: "ac_window", name: "Window AC Service", price: 299 }
-    ]
-  },
-  {
-    id: "sofa",
-    name: "Sofa Dry Cleaning",
-    rating: 4.9,
-    reviews: 19,
-    time: "60-90 min",
-    priceText: "₹199 / Seat",
-    image: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=400",
-    description: "Multi-stage shampoo wash to extract grease, sweat stains, and dust.",
-    whatsIncluded: [
-      "High-suction dry vacuuming",
-      "Upholstery scrub shampooing",
-      "Moisture extraction & deodorizer"
-    ],
-    whatsExcluded: [
-      "Leather polishing"
-    ],
-    variants: [
-      { id: "s_3seat", name: "3 Seater Sofa Cleaning", price: 599 },
-      { id: "s_5seat", name: "5 Seater Sofa Cleaning", price: 999 }
-    ]
-  },
-  {
-    id: "ro",
-    name: "RO Purifier Repair",
-    rating: 4.8,
-    reviews: 54,
-    time: "30 min",
-    priceText: "₹149 onwards",
-    image: "https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&q=80&w=400",
-    description: "Complete TDS testing and multi-stage filter cleaning checkup.",
-    whatsIncluded: [
-      "TDS levels water evaluation",
-      "Inside storage tank cleaning",
-      "Leakage fix diagnostics"
-    ],
-    whatsExcluded: [
-      "Membrane replacement spares cost"
-    ],
-    variants: [
-      { id: "ro_diag", name: "RO General Diagnostics", price: 149 },
-      { id: "ro_filt", name: "RO Filter Cartridge Clean", price: 499 }
+      { id: "t_500", name: "500L Tank", price: 499 },
+      { id: "t_1000", name: "1000L Tank", price: 799 },
+      { id: "t_1500", name: "1500L Tank", price: 1099 }
     ]
   }
 ];
@@ -363,20 +360,47 @@ export default function App() {
           <div className="uc-services-grid">
             {displayedServices.map(service => (
               <div key={service.id} className="uc-scroller-card" onClick={() => { setIsCheckoutOpen(true); setCheckoutStep(1); }}>
-                <div className="uc-scroller-img" style={{ backgroundImage: `url(${service.image})` }}></div>
+                <div className="uc-scroller-img-wrap">
+                  <div className="uc-scroller-img" style={{ backgroundImage: `url(${service.image})` }}></div>
+                  {service.badges && service.badges.length > 0 && (
+                    <div className="uc-badges-container">
+                      {service.badges.map(b => (
+                        <span key={b} className={b === 'Same Day' ? "uc-badge time" : "uc-badge"}>{b}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <div className="uc-scroller-info">
-                  <h3 className="uc-scroller-name">{service.name}</h3>
-                  <div className="uc-scroller-rating">
-                    <Star size={12} fill="currentColor" />
-                    <span>{service.rating} ({service.reviews} reviews)</span>
+                  <div className="uc-scroller-header">
+                    <h3 className="uc-scroller-name">{service.name}</h3>
+                    <div className="uc-scroller-rating">
+                      <Star size={12} fill="currentColor" /> {service.rating}
+                    </div>
                   </div>
+                  
+                  {service.highlights && (
+                    <ul className="uc-highlights">
+                      {service.highlights.map((hl, i) => (
+                        <li key={i}><CheckCircle2 size={12} className="highlight-icon" /> {hl}</li>
+                      ))}
+                    </ul>
+                  )}
+                  
+                  <div className="uc-meta-row">
+                    <span className="meta-item"><Clock size={12} /> {service.time}</span>
+                    <span className="meta-item"><Users size={12} /> {service.teamSize || "1 Hero Pro Team"}</span>
+                  </div>
+                  
                   <div className="uc-scroller-footer">
-                    <span className="uc-scroller-price">{service.priceText}</span>
-                    <button className="uc-add-btn-small" onClick={(e) => {
+                    <div className="price-block">
+                      <small>Starts from</small>
+                      <span className="uc-scroller-price">{service.priceText.replace("Starts from ", "")}</span>
+                    </div>
+                    <button className="uc-book-btn-premium" onClick={(e) => {
                       e.stopPropagation();
                       setIsCheckoutOpen(true);
                       setCheckoutStep(1);
-                    }}>ADD</button>
+                    }}>Book Now</button>
                   </div>
                 </div>
               </div>

@@ -293,63 +293,204 @@ input, textarea {
 }
 
 .uc-scroller-card {
-  background-color: var(--brand-white);
-  border: 1px solid var(--brand-border);
-  border-radius: var(--radius-lg);
+  flex: 0 0 calc(90vw - 2rem);
+  background: var(--brand-white);
+  border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-bento);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   flex-direction: column;
-  transition: var(--transition-bounce);
+  position: relative;
   cursor: pointer;
+  transform: translateZ(0);
+}
+.uc-scroller-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+  border-color: rgba(0, 102, 255, 0.2);
 }
 
-.uc-scroller-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--brand-blue);
+.uc-scroller-img-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 60%;
+  overflow: hidden;
+  background-color: var(--brand-gray-light);
 }
 
 .uc-scroller-img {
-  height: 150px;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
   background-size: cover;
   background-position: center;
+  transition: transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.uc-scroller-card:hover .uc-scroller-img {
+  transform: scale(1.1) rotate(1deg);
+}
+
+.uc-badges-container {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.uc-badge {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  color: var(--brand-navy);
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.4rem 0.75rem;
+  border-radius: 2rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.uc-badge.time {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
 }
 
 .uc-scroller-info {
-  padding: 1.25rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
+.uc-scroller-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
 .uc-scroller-name {
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  margin-bottom: 0.35rem;
+  color: var(--brand-navy);
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
 }
 
 .uc-scroller-rating {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 0.8rem;
-  color: #d97706;
+  gap: 0.35rem;
+  font-size: 0.85rem;
   font-weight: 800;
-  margin-bottom: 0.75rem;
+  color: var(--brand-gold);
+  background: rgba(245, 158, 11, 0.1);
+  padding: 0.35rem 0.75rem;
+  border-radius: 2rem;
+}
+
+.uc-highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.uc-highlights li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--brand-gray-medium);
+  font-weight: 600;
+}
+.highlight-icon {
+  color: var(--brand-blue);
+  flex-shrink: 0;
+}
+
+.uc-meta-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--brand-navy);
+  background: var(--brand-gray-light);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
 }
 
 .uc-scroller-footer {
-  margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: auto;
+}
+
+.price-block {
+  display: flex;
+  flex-direction: column;
+}
+.price-block small {
+  font-size: 0.65rem;
+  color: var(--brand-gray-medium);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .uc-scroller-price {
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 900;
+  color: var(--brand-navy);
 }
+
+.uc-book-btn-premium {
+  background: linear-gradient(135deg, var(--brand-blue) 0%, #0052cc 100%);
+  color: var(--brand-white);
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 2rem;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.uc-book-btn-premium:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 30px -10px rgba(0, 102, 255, 0.6);
+}
+.uc-book-btn-premium:active {
+  transform: translateY(0) scale(0.98);
+}
+
+@media (min-width: 768px) {
+  .uc-scroller-card {
+    flex: 0 0 calc(33.333% - 1.5rem);
+  }
+}
+@media (min-width: 992px) {
+  .uc-scroller-card {
+    flex: 0 0 calc(25% - 1.5rem);
+  }
+}
+
 
 /* Before / After Drag Slider widget - Fixed Clip-Path implementation */
 .uc-slider-layout {
