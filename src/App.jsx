@@ -808,9 +808,8 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* Step 4 Final Checkout Buttons inside Order Summary */}
-                    {checkoutStep === 4 && (
-                      <div className="checkout-wizard-footer" style={{ marginTop: '0', backgroundColor: 'transparent', borderTop: 'none', position: 'static', padding: '1rem 0 0 0' }}>
+                      {checkoutStep === 4 && (
+                        <div className="checkout-wizard-footer" style={{ marginTop: 'auto', backgroundColor: 'var(--brand-gray-light)' }}>
                         <button type="button" className="btn-wizard-back" onClick={() => setCheckoutStep(prev => prev - 1)}>
                           Back
                         </button>
