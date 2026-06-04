@@ -932,41 +932,48 @@ input, textarea {
     display: none !important;
   }
   
-  /* Header Fixes and Animations */
+  /* Mobile Header Absolute Morph Animation */
   .header-grid-anim {
-    flex-wrap: wrap; 
-    gap: 1rem;
-  }
-  .uc-search-container {
-    order: 3; 
-    max-width: 100%;
+    display: block;
+    position: relative;
     width: 100%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .uc-brand-logo {
-    max-width: 250px;
+    display: block;
+    height: 38px;
+    margin-bottom: 1rem;
     opacity: 1;
+    transform-origin: left center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .uc-search-container {
+    width: 100%;
+    margin: 0;
+    max-width: 100%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .uc-book-now-btn {
+    position: absolute;
+    top: 0;
+    right: 1.5rem;
+    margin: 0;
   }
   
   /* Mobile Scrolled State */
-  .header-scrolled .header-grid-anim {
-    gap: 0.75rem;
-  }
   .header-scrolled .uc-brand-logo {
-    max-width: 0;
+    height: 0;
+    margin-bottom: 0;
     opacity: 0;
-    margin: 0;
-    padding: 0;
-    border: none;
-    flex: 0 0 0px;
+    transform: scale(0.8);
+    pointer-events: none;
   }
+  
   .header-scrolled .uc-search-container {
-    width: 10px; /* Force flex-grow to take over */
-    flex-grow: 1;
-    order: 0; /* Move to top logical row */
-  }
-  .header-scrolled .uc-book-now-btn {
-    order: 1;
+    width: calc(100% - 110px);
   }
 
   /* Main Layout Stacks */
